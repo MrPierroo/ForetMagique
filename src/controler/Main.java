@@ -6,9 +6,7 @@ public class Main {
 		// TODO Auto-generated method stub
 
 		InitEnvironnement exE = new InitEnvironnement();
-
 		new Thread(exE).start();
-
 
 	}
 
