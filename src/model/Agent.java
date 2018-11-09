@@ -11,6 +11,7 @@ public class Agent {
 	public static final int DROITE = 3;
 	public static final int GAUCHE = 4;
 	public static final int LANCER_CAILLOU = 5;
+	public static final int SORTIR = 6;
 
 	private ArrayList<Elements> listElementObs = new ArrayList<Elements>();
 	private ArrayList<Elements> baseDeFaits = new ArrayList<Elements>();
@@ -80,6 +81,12 @@ public class Agent {
 	
 	public void lancerCaillou() {
 		//TODO
+		this.lastAction = LANCER_CAILLOU;
+	}
+	
+	public void sortir() {
+		//TODO
+		this.lastAction = SORTIR;
 	}
 	
 

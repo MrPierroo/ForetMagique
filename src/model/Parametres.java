@@ -11,7 +11,7 @@ public class Parametres {
 	public static final int COUT_CAILLOU = -10;
 	
 	// pas de temps en ms de la simulaion de l agent (modifiable)
-	private static int DELAI_AGENT = 200; 	
+	public static int DELAI_AGENT = 200; 	
 	public static final String NOM_CACA = "Caca";
 	public static final String NOM_CREVASSE = "Crevasse";
 	public static final String NOM_MONSTRE = "Monstre";
@@ -25,7 +25,7 @@ public class Parametres {
 	private static int NOMBRE_MONSTRES = 1;
 	private static int NOMBRE_CREVASSES = 1;
 	private static int NOMBRE_PORTAILS = 1;
-	private static int NIVEAU = 3;
+	private static int NIVEAU = 1;
 	
 	
 	public static int getTAILLE_GRILLE() {

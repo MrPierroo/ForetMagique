@@ -164,12 +164,6 @@ public class Draw{
 		}
 		for (int i = 0; i < List.size(); i++) {
 			Elements e = List.get(i);
-			if(e.getNom() == Parametres.NOM_VENT) {
-				g.drawImage(vent,CO(e.getX()),CO(e.getY()),T,T,null);
-			}
-		}
-		for (int i = 0; i < List.size(); i++) {
-			Elements e = List.get(i);
 			if(e.getNom() == Parametres.NOM_CREVASSE) {
 				g.drawImage(crevasse,CO(e.getX()),CO(e.getY()),T,T,null);
 			}
@@ -186,8 +180,14 @@ public class Draw{
 				g.drawImage(caca,CO(e.getX()),CO(e.getY()),T,T,null);
 			}
 		}
+		for (int i = 0; i < List.size(); i++) {
+			Elements e = List.get(i);
+			if(e.getNom() == Parametres.NOM_VENT) {
+				g.drawImage(vent,CO(e.getX()),CO(e.getY()),T,T,null);
+			}
+		}
 
-		// drawing du robot
+		// drawing du hero
 		if(Environnement.agent.getLastAction()==Agent.DROITE) {
 			g.drawImage(heroDroite, CO(Environnement.agent.getX()), CO(Environnement.agent.getY()), T, T, null);
 		}
