@@ -32,7 +32,9 @@ public class Agent {
 		Y=y;
 	}
 
-	
+	public void doCycle() {
+		
+	}
 	/** ============================================== Observation =============================================================================*/
 	public void actualiserObjectif() {
 	

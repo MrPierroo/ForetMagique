@@ -1,4 +1,5 @@
-package controler;
+
+import controler.ButtonHandler;
 import elements.Caca;
 import elements.Crevasse;
 import elements.Monstre;
@@ -7,17 +8,25 @@ import elements.Vent;
 import model.*;
 import view.*;
 
-public class InitEnvironnement implements Runnable{
+public class GameRun implements Runnable{
 
 	public void run() {
 
 		/**Initialisation de l environement*/
 		initialisationEnvironnement(Parametres.getNiveau());
-
+		ButtonHandler bh = new ButtonHandler();
 		System.out.println("Environnement : Hero en "+model.Environnement.agent.getX()+" , "+model.Environnement.agent.getY());
 
 		Draw drawing = new Draw(Parametres.NOM_ENVIRONNEMENT,Environnement.ListEnvironement);
 		drawing.render();
+		
+		while(true) {
+			if(Environnement.newCycle) {
+				drawing.render();
+				Environnement.newCycle = false;
+			}
+			try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+		}
 
 	}
 

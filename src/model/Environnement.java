@@ -10,6 +10,7 @@ public class Environnement {
 	private static int scoreEnvironnement;
 	public static Vector<Integer> scoresObtenus = new Vector<>();
 	private static double moyenneScore;
+	public static boolean newCycle = false;
 
 	
 	// verifie que la case x,y ne contient pas deja un element similaire ou un monstre et une crevasse mal agences

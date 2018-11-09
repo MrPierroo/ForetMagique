@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 
 import com.sun.javafx.tk.Toolkit;
 
+import controler.ButtonHandler;
 import model.Agent;
 import model.Elements;
 import model.Environnement;
@@ -127,8 +128,9 @@ public class Draw{
 		//this will set the background to black
 		canvas.setBackground(Color.black);
 		// This will add our buttonhandler to our program
-		//canvas.addKeyListener(new ButtonHandler());
-	}
+		canvas.addKeyListener(new ButtonHandler());
+    }
+	
 
 	// -------------------------------------------------Mise a jour avec le thread de l environnement-------------------------------------------------------------------------------
 
@@ -187,6 +189,7 @@ public class Draw{
 			}
 		}
 
+		
 		// drawing du robot
 		if(Environnement.agent.getLastAction()==Agent.DROITE) {
 			g.drawImage(heroDroite, CO(Environnement.agent.getX()), CO(Environnement.agent.getY()), T, T, null);
