@@ -144,6 +144,9 @@ public class ViewAgent{
 
 	protected void render(Graphics2D g){
 
+		List = Environnement.agent.getListElementObs();
+		intervalle = (int)(WIDTH/Parametres.getTAILLE_GRILLE()*0.99);
+		
 		int T =(int) (intervalle*0.9); // Taille d un element 
 		g.setColor(Color.black);
 		g.setBackground(Color.black);

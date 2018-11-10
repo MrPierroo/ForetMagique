@@ -26,7 +26,7 @@ public class Parametres {
 	private static int NOMBRE_MONSTRES = 1;
 	private static int NOMBRE_CREVASSES = 1;
 	private static int NOMBRE_PORTAILS = 1;
-	private static int NIVEAU = 3;
+	private static int NIVEAU = 1;
 	
 	
 	public static int getTAILLE_GRILLE() {

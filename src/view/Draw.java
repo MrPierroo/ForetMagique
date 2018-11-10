@@ -106,13 +106,7 @@ public class Draw{
 		frame.setResizable(false);
 
 		//this will place the frames on different positions
-		switch(titre) {
-		case Parametres.NOM_ENVIRONNEMENT : frame.setLocation(0, 0);
-		break;
-		case Parametres.NOM_AGENT : frame.setLocation(WIDTH + 20, 0);
-		break;
-		default : break;
-		}
+		frame.setLocation(0, 0);
 
 
 		frame.setVisible(true);
@@ -144,6 +138,9 @@ public class Draw{
 
 	protected void render(Graphics2D g){
 
+		List = Environnement.ListEnvironement;
+		intervalle = (int)(WIDTH/Parametres.getTAILLE_GRILLE()*0.99);
+		
 		int T =(int) (intervalle*0.9); // Taille d un element 
 		g.setColor(Color.black);
 		g.setBackground(Color.black);

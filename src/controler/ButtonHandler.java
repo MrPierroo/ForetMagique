@@ -6,9 +6,7 @@ import org.omg.CORBA.Environment;
 
 public class ButtonHandler extends KeyAdapter {
 
-    public ButtonHandler() {
-       System.out.println(" Button handler initialised! ");
-               
+    public ButtonHandler() {         
     }
   //This function will be used as soon as a key is released.
     public void keyPressed(KeyEvent key) {
@@ -30,6 +28,16 @@ public class ButtonHandler extends KeyAdapter {
                break;
            case KeyEvent.VK_RIGHT:
         	   Environnement.agent.goRight();
+        	   Environnement.newCycle = true;
+               break;
+           case KeyEvent.VK_A:
+        	   Environnement.agent.lancerCaillou();
+        	   System.out.println("Agent : jette un caillou");
+        	   Environnement.newCycle = true;
+               break;
+           case KeyEvent.VK_Z:
+        	   Environnement.agent.goSortir();
+        	   System.out.println("Agent : demande a sortir");
         	   Environnement.newCycle = true;
                break;
            case KeyEvent.VK_SPACE:

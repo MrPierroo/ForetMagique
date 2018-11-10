@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+import Game.GameRun;
 import elements.Vide;
 
 public class Agent {
@@ -13,6 +14,7 @@ public class Agent {
 	public static final int DROITE = 3;
 	public static final int GAUCHE = 4;
 	public static final int LANCER_CAILLOU = 5;
+	public static final int SORTIR = 6;
 
 	private ArrayList<Elements> listElementObs = new ArrayList<Elements>();
 	private ArrayList<Elements> baseDeFaits = new ArrayList<Elements>();
@@ -77,37 +79,93 @@ public class Agent {
 	public void goUp(){
 		if(this.Y>0){
 			this.Y--;
-			this.lastAction = HAUT;
-			ajouterVisionAgent();
+			int x = this.getX();
+			int y = this.getY();
+			if(Environnement.monstreEn(x,y) || Environnement.crevasseEn(x,y)) {
+				if(Parametres.getNiveau()>1) {
+					Parametres.setNIVEAU(Parametres.getNiveau()-1);
+				}
+				GameRun.demandeNouveauNiveau = true;
+			}
+			else {
+				this.lastAction = HAUT;
+				ajouterVisionAgent();
+			}
 		}
 	}
 
 	public void goDown(){
 		if(this.Y<Parametres.getTAILLE_GRILLE()-1){
 			this.Y++;
-			this.lastAction = BAS;
-			ajouterVisionAgent();
+			int x = this.getX();
+			int y = this.getY();
+			if(Environnement.monstreEn(x,y) || Environnement.crevasseEn(x,y)) {
+				if(Parametres.getNiveau()>1) {
+					Parametres.setNIVEAU(Parametres.getNiveau()-1);
+				}
+				GameRun.demandeNouveauNiveau = true;
+			}
+			else {
+				this.lastAction = BAS;
+				ajouterVisionAgent();
+			}
 		}
 	}
 
 	public void goRight(){
 		if(this.X<Parametres.getTAILLE_GRILLE()-1){
 			this.X++;
-			this.lastAction = DROITE;
-			ajouterVisionAgent();
+			int x = this.getX();
+			int y = this.getY();
+			if(Environnement.monstreEn(x,y) || Environnement.crevasseEn(x,y)) {
+				if(Parametres.getNiveau()>1) {
+					Parametres.setNIVEAU(Parametres.getNiveau()-1);
+				}
+				GameRun.demandeNouveauNiveau = true;
+			}
+			else {
+				this.lastAction = DROITE;
+				ajouterVisionAgent();
+			}
 		}
 	}
 
 	public void goLeft(){
 		if(this.X>0){
 			this.X--;
-			this.lastAction = GAUCHE;
-			ajouterVisionAgent();
+			int x = this.getX();
+			int y = this.getY();
+			if(Environnement.monstreEn(x,y) || Environnement.crevasseEn(x,y)) {
+				if(Parametres.getNiveau()>1) {
+					Parametres.setNIVEAU(Parametres.getNiveau()-1);
+				}
+				GameRun.demandeNouveauNiveau = true;
+			}
+			else {
+				this.lastAction = GAUCHE;
+				ajouterVisionAgent();
+			}
 		}
 	}
 	
 	public void lancerCaillou() {
 		//TODO
+	}
+	
+	public void goSortir() {
+		int x = this.getX();
+		int y = this.getY();
+		if(Environnement.portailEn(x,y)) {
+			Parametres.setNIVEAU(Parametres.getNiveau()+1);
+			GameRun.demandeNouveauNiveau = true;
+		}
+		this.lastAction = SORTIR;
+	}
+	
+	
+	/**=============================================== Reinitialisation ==============================================================================*/
+	public void reinitialiserAgent() {
+		Environnement.agent.listElementObs.removeAll(listElementObs);
 	}
 	
 

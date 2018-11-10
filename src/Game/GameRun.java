@@ -1,3 +1,4 @@
+package Game;
 
 import controler.ButtonHandler;
 import elements.Caca;
@@ -10,9 +11,12 @@ import view.*;
 
 public class GameRun implements Runnable{
 
+	public static boolean demandeNouveauNiveau = false;
+	
 	public void run() {
 
 		/**Initialisation de l environement*/
+		System.out.println("Initialisation du niveau "+Parametres.getNiveau()+" ... ");
 		initialisationEnvironnement(Parametres.getNiveau());
 		ButtonHandler bh = new ButtonHandler();
 		System.out.println("Environnement : Hero en "+model.Environnement.agent.getX()+" , "+model.Environnement.agent.getY());
@@ -21,12 +25,24 @@ public class GameRun implements Runnable{
 		ViewAgent drawingAgent = new ViewAgent(Parametres.NOM_AGENT, Environnement.ListEnvironement);
 		drawingEnvironnement.render();
 		drawingAgent.render();
+		System.out.println("Initialisation effectuee ! ");
 		
 		while(true) {
 			if(Environnement.newCycle) {
 				drawingEnvironnement.render();
 				drawingAgent.render();
 				Environnement.newCycle = false;
+			}
+			if(GameRun.demandeNouveauNiveau) {
+				System.out.println("Initialisation du niveau "+Parametres.getNiveau()+" ... ");
+				for(int i = 0 ; i<Environnement.agent.getListElementObs().size() ; i++) {
+					System.out.println(Environnement.agent.getListElementObs().get(i).getNom());
+				}
+				initialisationEnvironnement(Parametres.getNiveau());
+				drawingEnvironnement.render();
+				drawingAgent.render();
+				System.out.println("Initialisation effectuee ! ");
+				GameRun.demandeNouveauNiveau = false;
 			}
 			try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 		}
@@ -35,34 +51,37 @@ public class GameRun implements Runnable{
 
 	// -------------------------------------------------Methode pour initialiser l'environnement-------------------------------------------------------------------------------
 
-	public void initialisationEnvironnement(int niveau) {
+	public static void initialisationEnvironnement(int niveau) {
 
 		int compteurMonstres = 0;
 		int compteurCrevasses = 0;
 		int compteurPortails = 0;
 		
+		Environnement.agent.reinitialiserAgent();
+		Environnement.reinitialiserEnvironnement();
+		
 		Parametres.setTAILLE_GRILLE(2+niveau);
 		
-		Parametres.setNOMBRE_MONSTRES(niveau);
-		Parametres.setNOMBRE_CREVASSES(niveau);
+		Parametres.setNOMBRE_MONSTRES((int)Parametres.getTAILLE_GRILLE()/2);
+		Parametres.setNOMBRE_CREVASSES((int)Parametres.getTAILLE_GRILLE()/2);
 
-		while(thereIsMonstre() == false || compteurMonstres<Parametres.getNOMBRE_MONSTRES()) {
+		while(Environnement.thereIsMonstre() == false || compteurMonstres<Parametres.getNOMBRE_MONSTRES()) {
 			genererMonstreCaca();
-			if(thereIsMonstre()) {
+			if(Environnement.thereIsMonstre()) {
 				compteurMonstres++;
 			}
 		}
 
-		while(thereIsCrevasse() == false || compteurCrevasses<Parametres.getNOMBRE_CREVASSES()) {
+		while(Environnement.thereIsCrevasse() == false || compteurCrevasses<Parametres.getNOMBRE_CREVASSES()) {
 			genererCrevasseVent();
-			if(thereIsCrevasse()) {
+			if(Environnement.thereIsCrevasse()) {
 				compteurCrevasses++;
 			}
 		}
 
-		while(thereIsPortail() == false || compteurPortails<Parametres.getNOMBRE_PORTAILS()) {
+		while(Environnement.thereIsPortail() == false || compteurPortails<Parametres.getNOMBRE_PORTAILS()) {
 			genererPortail();
-			if(thereIsPortail()) {
+			if(Environnement.thereIsPortail()) {
 				compteurPortails++;
 			}
 		}
@@ -79,96 +98,83 @@ public class GameRun implements Runnable{
 
 	// ------------------------------------------------Generer les elements-------------------------------------------------------------------------------
 
-	public void genererMonstreCaca() {
+	public static void genererMonstreCaca() {
 		int x = (int) (Math.random()*Parametres.getTAILLE_GRILLE());
 		int y = (int) (Math.random()*Parametres.getTAILLE_GRILLE());
 		if(Environnement.caseDisponible(x, y)) {
 			Environnement.ListEnvironement.add(new Monstre(x, y));
-			System.out.println("Environnement : Monstre apparu en "+x+","+y);
 			if(x-1 >= 0) {
 				if (Environnement.caseDisponible(x-1, y)) {
 					Environnement.ListEnvironement.add(new Caca(x-1, y));
-					System.out.println("Environnement : Caca apparu en "+(x-1)+","+y);
 				}
 			}
 			if(x+1 < Parametres.getTAILLE_GRILLE()) {
 				if (Environnement.caseDisponible(x+1, y)) {
 					Environnement.ListEnvironement.add(new Caca(x+1, y));
-					System.out.println("Environnement : Caca apparu en "+(x+1)+","+y);
 				}
 			}
 			if(y-1 >= 0) {
 				if (Environnement.caseDisponible(x, y-1)) {
 					Environnement.ListEnvironement.add(new Caca(x, y-1));
-					System.out.println("Environnement : Caca apparu en "+(x)+","+(y-1));
 				}
 			}
 			if(y+1 < Parametres.getTAILLE_GRILLE()) {
 				if (Environnement.caseDisponible(x, y+1)) {
 					Environnement.ListEnvironement.add(new Caca(x, y+1));
-					System.out.println("Environnement : Caca apparu en "+(x)+","+(y+1));
 				}
 			}
 		}
 	}
 
-	public void genererCrevasseVent() {
+	public static void genererCrevasseVent() {
 		int x = (int) (Math.random()*Parametres.getTAILLE_GRILLE());
 		int y = (int) (Math.random()*Parametres.getTAILLE_GRILLE());
 		if(Environnement.caseDisponible(x, y)) {
 			Environnement.ListEnvironement.add(new Crevasse(x, y));
-			System.out.println("Environnement : Crevasse apparue en "+x+","+y);
 			if(x-1 >= 0) {
 				if (Environnement.caseDisponible(x-1, y)) {
 					Environnement.ListEnvironement.add(new Vent(x-1, y));
-					System.out.println("Environnement : Vent apparu en "+(x-1)+","+y);
 				}
 			}
 			if(x+1 < Parametres.getTAILLE_GRILLE()) {
 				if (Environnement.caseDisponible(x+1, y)) {
 					Environnement.ListEnvironement.add(new Vent(x+1, y));
-					System.out.println("Environnement : Vent apparu en "+(x+1)+","+y);
 				}
 			}
 			if(y-1 >= 0) {
 				if (Environnement.caseDisponible(x, y-1)) {
 					Environnement.ListEnvironement.add(new Vent(x, y-1));
-					System.out.println("Environnement : Vent apparu en "+(x)+","+(y-1));
 				}
 			}
 			if(y+1 < Parametres.getTAILLE_GRILLE()) {
 				if (Environnement.caseDisponible(x, y+1)) {
 					Environnement.ListEnvironement.add(new Vent(x, y+1));
-					System.out.println("Environnement : Vent apparu en "+(x)+","+(y+1));
 				}
 			}
 		}
 	}
 
-	public void genererPortail() {
+	public static void genererPortail() {
 		int x = (int) (Math.random()*Parametres.getTAILLE_GRILLE());
 		int y = (int) (Math.random()*Parametres.getTAILLE_GRILLE());
 		if(Environnement.caseDisponible(x, y)) {
 			Environnement.ListEnvironement.add(new Portail(x, y));
-			System.out.println("Environnement : Portail cree en "+x+","+y);
 		}
 	}
 
-	public void placerHero() {
+	public static void placerHero() {
 		boolean boucle = true;
 		int a = 0;
 		int b = 0;
 		while(boucle == true) {
 			a = (int) (Math.random()*Parametres.getTAILLE_GRILLE());
 			b = (int) (Math.random()*Parametres.getTAILLE_GRILLE());
-			if(!isThereMonstre(a,b) && !isThereCrevasse(a,b) && !isTherePortail(a,b)) {
+			if(!Environnement.monstreEn(a,b) && !Environnement.crevasseEn(a,b) && !Environnement.portailEn(a,b)) {
 				Environnement.agent.setX(a);
 				Environnement.agent.setY(b);
-				System.out.println("Environnement : Hero place en "+a+" , "+b);
 				boucle = false;
 			}
 			else {
-				System.out.println("Environnement : Hero refuse en "+a+" , "+b);
 			}
 		}
 	}
@@ -176,14 +182,12 @@ public class GameRun implements Runnable{
 
 	// ----------------------------------------------Nettoyer les cacas et vents mal agences-------------------------------------------------------------------------------
 
-	public void nettoyer() {
+	public static void nettoyer() {
 		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
 			if(Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_CACA || Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_VENT) {
 				int x = Environnement.ListEnvironement.get(i).getX();
 				int y = Environnement.ListEnvironement.get(i).getY();
-				System.out.println("Caca ou vent detecte en "+x+" "+y);
-				if(isThereMonstre(x,y) || isThereCrevasse(x,y) || isTherePortail(x,y)) {
-					System.out.println("Environnement : Nettoyage de "+Environnement.ListEnvironement.get(i).getNom()+" en "+x+" "+y);
+				if(Environnement.monstreEn(x,y) || Environnement.crevasseEn(x,y) || Environnement.portailEn(x,y)) {
 					Environnement.ListEnvironement.remove(i);
 				}
 			}
@@ -207,91 +211,6 @@ public class GameRun implements Runnable{
 		return Environnement.agent.getLastAction();
 	}
 
-
-
-	// -------------------------------------------------Voir la presence d element-------------------------------------------------------------------------------
-
-	public boolean thereIsMonstre() {
-		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
-			if(Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_MONSTRE) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean thereIsCrevasse() {
-		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
-			if(Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_CREVASSE) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean thereIsPortail() {
-		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
-			if(Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_PORTAIL) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isThereMonstre(int x, int y) {
-		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
-			int a = Environnement.ListEnvironement.get(i).getX();
-			int b = Environnement.ListEnvironement.get(i).getY();
-			if(x==a && y==b && Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_MONSTRE) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isThereCrevasse(int x, int y) {
-		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
-			int a = Environnement.ListEnvironement.get(i).getX();
-			int b = Environnement.ListEnvironement.get(i).getY();
-			if(x==a && y==b && Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_CREVASSE) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isTherePortail(int x, int y) {
-		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
-			int a = Environnement.ListEnvironement.get(i).getX();
-			int b = Environnement.ListEnvironement.get(i).getY();
-			if(x==a && y==b && Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_PORTAIL) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isThereCaca(int x, int y) {
-		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
-			int a = Environnement.ListEnvironement.get(i).getX();
-			int b = Environnement.ListEnvironement.get(i).getY();
-			if(x==a && y==b && Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_CACA) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isThereVent(int x, int y) {
-		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
-			int a = Environnement.ListEnvironement.get(i).getX();
-			int b = Environnement.ListEnvironement.get(i).getY();
-			if(x==a && y==b && Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_VENT) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	// -------------------------------------------------Mettre a jour l'environement-------------------------------------------------------------------------------
 
