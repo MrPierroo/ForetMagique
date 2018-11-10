@@ -12,7 +12,7 @@ import view.*;
 public class GameRun implements Runnable{
 
 	public static boolean demandeNouveauNiveau = false;
-	
+
 	public void run() {
 
 		/**Initialisation de l environement*/
@@ -26,9 +26,10 @@ public class GameRun implements Runnable{
 		drawingEnvironnement.render();
 		drawingAgent.render();
 		System.out.println("Initialisation effectuee ! ");
-		
+
 		while(true) {
 			if(Environnement.newCycle) {
+				observationAgent();
 				drawingEnvironnement.render();
 				drawingAgent.render();
 				Environnement.newCycle = false;
@@ -56,12 +57,12 @@ public class GameRun implements Runnable{
 		int compteurMonstres = 0;
 		int compteurCrevasses = 0;
 		int compteurPortails = 0;
-		
+
 		Environnement.agent.reinitialiserAgent();
 		Environnement.reinitialiserEnvironnement();
-		
+
 		Parametres.setTAILLE_GRILLE(2+niveau);
-		
+
 		Parametres.setNOMBRE_MONSTRES((int)Parametres.getTAILLE_GRILLE()/2);
 		Parametres.setNOMBRE_CREVASSES((int)Parametres.getTAILLE_GRILLE()/2);
 
@@ -89,7 +90,7 @@ public class GameRun implements Runnable{
 		nettoyer();
 
 		placerHero();
-		
+
 		Environnement.agent.ajouterVisionAgent();
 
 	}
@@ -103,6 +104,7 @@ public class GameRun implements Runnable{
 		int y = (int) (Math.random()*Parametres.getTAILLE_GRILLE());
 		if(Environnement.caseDisponible(x, y)) {
 			Environnement.ListEnvironement.add(new Monstre(x, y));
+			System.out.println("Environnement : creation de monstre en "+x+" , "+y);
 			if(x-1 >= 0) {
 				if (Environnement.caseDisponible(x-1, y)) {
 					Environnement.ListEnvironement.add(new Caca(x-1, y));
@@ -131,6 +133,7 @@ public class GameRun implements Runnable{
 		int y = (int) (Math.random()*Parametres.getTAILLE_GRILLE());
 		if(Environnement.caseDisponible(x, y)) {
 			Environnement.ListEnvironement.add(new Crevasse(x, y));
+			System.out.println("Environnement : creation de crevasse en "+x+" , "+y);
 			if(x-1 >= 0) {
 				if (Environnement.caseDisponible(x-1, y)) {
 					Environnement.ListEnvironement.add(new Vent(x-1, y));
@@ -214,15 +217,32 @@ public class GameRun implements Runnable{
 
 	// -------------------------------------------------Mettre a jour l'environement-------------------------------------------------------------------------------
 
-	public void majEnvironement() {
+	public void observationAgent() {
 
-		int PositionX = getXPositionAgent();
-		int PositionY = getYPositionAgent();
+		int x = getXPositionAgent();
+		int y = getYPositionAgent();
 		int lastAction = getLastActionAgent();
 
+		if(Environnement.monstreEn(x,y) || Environnement.crevasseEn(x, y)) {
+			if(Parametres.getNiveau()>1) {
+				Parametres.setNIVEAU(Parametres.getNiveau()-1);
+			}
+			GameRun.demandeNouveauNiveau = true;
+		}
 
-		if(lastAction == Agent.LANCER_CAILLOU) {
-			//TODO
+		if(Environnement.portailEn(x,y) && lastAction == Environnement.agent.SORTIR) {
+			Parametres.setNIVEAU(Parametres.getNiveau()+1);
+			GameRun.demandeNouveauNiveau = true;
+		}
+
+		if(lastAction == Environnement.agent.LANCER_CAILLOU) {
+			int a = Environnement.agent.getCaseViseeAvecCaillou()[0];
+			int b = Environnement.agent.getCaseViseeAvecCaillou()[1];
+			if(Environnement.monstreEn(a,b)) {
+				Environnement.removeMonstre(a,b);
+				System.out.println("Environnement : monstre tue en "+a+" , "+b);
+				
+			}	
 		}
 
 	}

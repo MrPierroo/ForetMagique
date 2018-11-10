@@ -18,7 +18,7 @@ public class Environnement {
 		for (int i = 0; i < ListEnvironement.size(); i++) {
 			int a = ListEnvironement.get(i).getX();
 			int b = ListEnvironement.get(i).getY();
-			if(x==a && y==b && (ListEnvironement.get(i).getNom() == Parametres.NOM_MONSTRE || ListEnvironement.get(i).getNom() == Parametres.NOM_CREVASSE)) {
+			if(x==a && y==b && (ListEnvironement.get(i).getNom() == Parametres.NOM_MONSTRE || ListEnvironement.get(i).getNom() == Parametres.NOM_CREVASSE || ListEnvironement.get(i).getNom() == Parametres.NOM_PORTAIL)) {
 				return false;
 			}
 		}
@@ -190,6 +190,18 @@ public class Environnement {
 		}
 		return false;
 	}
+	
+	// -------------------------------------------------Supprimer un element-------------------------------------------------------------------------------
 
+	public static void removeMonstre(int x, int y) {
+		for(int i = 0 ; i<Environnement.ListEnvironement.size() ; i++) {
+			int a = Environnement.ListEnvironement.get(i).getX();
+			int b = Environnement.ListEnvironement.get(i).getY();
+			if(x==a && y==b && Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_MONSTRE) {
+				Environnement.ListEnvironement.remove(i);
+			}
+		}
+	}
+	
 
 }

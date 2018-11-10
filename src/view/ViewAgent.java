@@ -184,16 +184,16 @@ public class ViewAgent{
 
 		
 		// drawing du robot
-		if(Environnement.agent.getLastAction()==Agent.DROITE) {
+		if(Environnement.agent.getLastAction()==Environnement.agent.DROITE) {
 			g.drawImage(heroDroite, CO(Environnement.agent.getX()), CO(Environnement.agent.getY()), T, T, null);
 		}
-		else if(Environnement.agent.getLastAction()==Agent.GAUCHE) {
+		else if(Environnement.agent.getLastAction()==Environnement.agent.GAUCHE) {
 			g.drawImage(heroGauche, CO(Environnement.agent.getX()), CO(Environnement.agent.getY()), T, T, null);
 		}
-		else if(Environnement.agent.getLastAction()==Agent.BAS) {
+		else if(Environnement.agent.getLastAction()==Environnement.agent.BAS) {
 			g.drawImage(heroBas, CO(Environnement.agent.getX()), CO(Environnement.agent.getY()), T, T, null);
 		}
-		else if(Environnement.agent.getLastAction()==Agent.HAUT) {
+		else if(Environnement.agent.getLastAction()==Environnement.agent.HAUT) {
 			g.drawImage(heroHaut, CO(Environnement.agent.getX()), CO(Environnement.agent.getY()), T, T, null);
 		}
 		else {
