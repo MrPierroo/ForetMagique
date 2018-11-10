@@ -28,7 +28,7 @@ import model.Parametres;
 
 /** ======================================= Dessiner les fenetres et tous les elements a mettre a jour ===========================================================*/
 
-public class Draw{
+public class ViewAgent{
 
 	// -------------------------------------------------Attributs-------------------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ public class Draw{
 
 	// -------------------------------------------------Constructeur-------------------------------------------------------------------------------
 
-	public Draw(String titre, ArrayList<Elements> list){
+	public ViewAgent(String titre, ArrayList<Elements> list){
 
 		//Chargement des ressources utiles
 		List = list;
@@ -151,15 +151,17 @@ public class Draw{
 		for (int i = 0; i < Parametres.getTAILLE_GRILLE(); i++) {
 			for (int j = 0; j < Parametres.getTAILLE_GRILLE(); j++) {
 				g.drawRect(CO(i), CO(j),T,T );
-				g.setColor(Color.white);
+				g.setColor(Color.black);
 				g.fillRect(CO(i), CO(j),T,T );
 				g.setColor(Color.darkGray);
 				g.drawRect(CO(i), CO(j),T,T );
 			}
 		}
 
-		for (int i = 0; i < List.size(); i++) {
-			Elements e = List.get(i);
+		for (int i = 0; i < Environnement.agent.getListElementObs().size(); i++) {
+			Elements e = Environnement.agent.getListElementObs().get(i);
+			g.setColor(Color.white);
+			g.fillRect(CO(e.getX()), CO(e.getY()),T,T);
 			if(e.getNom() == Parametres.NOM_MONSTRE) {
 				g.drawImage(monstre,CO(e.getX()),CO(e.getY()),T,T,null);
 			}
@@ -176,7 +178,7 @@ public class Draw{
 				g.drawImage(caca,CO(e.getX()),CO(e.getY()),T,T,null);
 			}
 		}
-		
+
 		
 		// drawing du robot
 		if(Environnement.agent.getLastAction()==Agent.DROITE) {
@@ -194,6 +196,7 @@ public class Draw{
 		else {
 			g.drawImage(heroBas, CO(Environnement.agent.getX()), CO(Environnement.agent.getY()), T, T, null);
 		}
+		
 		
 
 	}

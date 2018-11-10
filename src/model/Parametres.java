@@ -17,6 +17,7 @@ public class Parametres {
 	public static final String NOM_MONSTRE = "Monstre";
 	public static final String NOM_PORTAIL = "Portail";
 	public static final String NOM_VENT = "Vent";
+	public static final String NOM_VIDE = "Vide";
 	public static final String NOM_ENVIRONNEMENT = "Environnement";
 	public static final String NOM_AGENT = "Agent";
 	

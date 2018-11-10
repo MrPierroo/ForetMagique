@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import elements.Vide;
+
 public class Agent {
 
 	//Mouvement de l'agent
@@ -44,6 +46,26 @@ public class Agent {
 	public void observerEnvironnement(){
 		
 	}
+	
+	public void ajouterVisionAgent() {
+		
+		boolean elementAjoute = false;
+		int x = Environnement.agent.getX();
+		int y = Environnement.agent.getY();
+		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
+			int a = Environnement.ListEnvironement.get(i).getX();
+			int b = Environnement.ListEnvironement.get(i).getY();
+			if(x==a && y==b) {
+				listElementObs.add(Environnement.ListEnvironement.get(i));
+				elementAjoute = true;
+			}
+		}
+		
+		if(elementAjoute == false) {
+			listElementObs.add(new Vide(x,y));
+		}
+		
+	}
 
 	/** ============================================ Mise ajour Etat ===========================================================================*/
 	public void ajoutPerformance() {
@@ -56,6 +78,7 @@ public class Agent {
 		if(this.Y>0){
 			this.Y--;
 			this.lastAction = HAUT;
+			ajouterVisionAgent();
 		}
 	}
 
@@ -63,6 +86,7 @@ public class Agent {
 		if(this.Y<Parametres.getTAILLE_GRILLE()-1){
 			this.Y++;
 			this.lastAction = BAS;
+			ajouterVisionAgent();
 		}
 	}
 
@@ -70,6 +94,7 @@ public class Agent {
 		if(this.X<Parametres.getTAILLE_GRILLE()-1){
 			this.X++;
 			this.lastAction = DROITE;
+			ajouterVisionAgent();
 		}
 	}
 
@@ -77,6 +102,7 @@ public class Agent {
 		if(this.X>0){
 			this.X--;
 			this.lastAction = GAUCHE;
+			ajouterVisionAgent();
 		}
 	}
 	

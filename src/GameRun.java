@@ -17,12 +17,15 @@ public class GameRun implements Runnable{
 		ButtonHandler bh = new ButtonHandler();
 		System.out.println("Environnement : Hero en "+model.Environnement.agent.getX()+" , "+model.Environnement.agent.getY());
 
-		Draw drawing = new Draw(Parametres.NOM_ENVIRONNEMENT,Environnement.ListEnvironement);
-		drawing.render();
+		Draw drawingEnvironnement = new Draw(Parametres.NOM_ENVIRONNEMENT,Environnement.ListEnvironement);
+		ViewAgent drawingAgent = new ViewAgent(Parametres.NOM_AGENT, Environnement.ListEnvironement);
+		drawingEnvironnement.render();
+		drawingAgent.render();
 		
 		while(true) {
 			if(Environnement.newCycle) {
-				drawing.render();
+				drawingEnvironnement.render();
+				drawingAgent.render();
 				Environnement.newCycle = false;
 			}
 			try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
@@ -67,6 +70,8 @@ public class GameRun implements Runnable{
 		nettoyer();
 
 		placerHero();
+		
+		Environnement.agent.ajouterVisionAgent();
 
 	}
 
