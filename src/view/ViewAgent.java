@@ -160,11 +160,15 @@ public class ViewAgent{
 				g.drawRect(CO(i), CO(j),T,T );
 			}
 		}
-
-		for (int i = 0; i < Environnement.agent.getListElementObs().size(); i++) {
+		
+		for (int i = 0; i < Environnement.agent.getListElementObs().size(); i++){
 			Elements e = Environnement.agent.getListElementObs().get(i);
 			g.setColor(Color.white);
 			g.fillRect(CO(e.getX()), CO(e.getY()),T,T);
+		}
+
+		for (int i = 0; i < Environnement.agent.getListElementObs().size(); i++) {
+			Elements e = Environnement.agent.getListElementObs().get(i);
 			if(e.getNom() == Parametres.NOM_MONSTRE) {
 				g.drawImage(monstre,CO(e.getX()),CO(e.getY()),T,T,null);
 			}

@@ -32,6 +32,6 @@ public abstract class Elements {
 	
 	//debuggage 
 	public String toString(){
-		return "("+this.X+","+this.Y+")";
+		return "("+this.X+","+this.Y+","+this.Nom+")";
 	}
 }

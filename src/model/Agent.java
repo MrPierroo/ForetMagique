@@ -53,7 +53,7 @@ public class Agent {
 
 	public void ajouterVisionAgent() {
 
-		boolean elementAjoute = false;
+	    boolean elementAjoute = false;
 		int x = Environnement.agent.getX();
 		int y = Environnement.agent.getY();
 		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {

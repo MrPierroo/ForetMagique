@@ -72,6 +72,8 @@ public class GameRun implements Runnable{
 				compteurMonstres++;
 			}
 		}
+		
+		nettoyer();
 
 		while(Environnement.thereIsCrevasse() == false || compteurCrevasses<Parametres.getNOMBRE_CREVASSES()) {
 			genererCrevasseVent();
@@ -79,6 +81,8 @@ public class GameRun implements Runnable{
 				compteurCrevasses++;
 			}
 		}
+		
+		nettoyer();
 
 		while(Environnement.thereIsPortail() == false || compteurPortails<Parametres.getNOMBRE_PORTAILS()) {
 			genererPortail();
