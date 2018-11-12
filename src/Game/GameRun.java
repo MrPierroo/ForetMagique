@@ -29,9 +29,11 @@ public class GameRun implements Runnable{
 
 		while(true) {
 			if(Environnement.newCycle) {
-				observationAgent();
 				
+				observationAgent();
 				Environnement.agent.observer();
+				Environnement.agent.calculScore();
+				
 				drawingEnvironnement.render();
 				drawingAgent.render();
 				Environnement.newCycle = false;

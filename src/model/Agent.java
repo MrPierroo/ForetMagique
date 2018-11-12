@@ -113,9 +113,10 @@ public class Agent {
 	}
 	
 	public void calculScore() {
-		
+		for (Voisin v : caseVoisines) {
+			MoteurInference.calculerScore(v);
+		}
 	}
-
 
 	/** ================================================ Action ================================================================================*/
 	public void goUp(){
