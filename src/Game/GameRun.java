@@ -173,20 +173,14 @@ public class GameRun implements Runnable{
 	}
 
 	public static void placerHero() {
-		boolean boucle = true;
-		int a = 0;
-		int b = 0;
-		while(boucle == true) {
+		int a=0;
+		int b=0;
+		do{
 			a = (int) (Math.random()*Parametres.getTAILLE_GRILLE());
 			b = (int) (Math.random()*Parametres.getTAILLE_GRILLE());
-			if(!Environnement.monstreEn(a,b) && !Environnement.crevasseEn(a,b) && !Environnement.portailEn(a,b)) {
-				Environnement.agent.setX(a);
-				Environnement.agent.setY(b);
-				boucle = false;
-			}
-			else {
-			}
-		}
+			Environnement.agent.setX(a);
+			Environnement.agent.setY(b);
+		} while (!Environnement.isAnythingOn(a, b));
 	}
 
 
