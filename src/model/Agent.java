@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Game.GameRun;
 import elements.Vide;
+import elements.Voisin;
 
 public class Agent {
 
@@ -19,6 +20,7 @@ public class Agent {
 	private ArrayList<Elements> listElementObs = new ArrayList<Elements>();
 	private ArrayList<Elements> baseDeFaits = new ArrayList<Elements>();
 	private ArrayList<Integer> baseDeRegles = new ArrayList<Integer>();
+	private ArrayList<Voisin> caseVoisines = new ArrayList<>();
 	private int lastAction;
 	private int direction = BAS;
 	private int energieDepense = 0;
@@ -42,20 +44,31 @@ public class Agent {
 
 	}
 	/** ============================================== Observation =============================================================================*/
-	public void actualiserObjectif() {
-
+	public void observer() {
+		ajouterVisionAgent();
+		observerVoisin();
 	}
-
-
-	public void observerEnvironnement(){
-
+	public void observerVoisin() {
+		int X = this.X; int Y = this.Y;
+		if(X-1>=0) {
+			if(!isVoisinObs(X-1, Y) && !isElementObs(X-1, Y)) caseVoisines.add(new Voisin(X-1, Y));
+		}
+		if(Y-1>=0) {
+			if(!isVoisinObs(X, Y-1) && !isElementObs(X, Y-1)) caseVoisines.add(new Voisin(X, Y-1));
+		}
+		if(X<Parametres.getTAILLE_GRILLE()) {
+			if(!isVoisinObs(X+1, Y) && !isElementObs(X+1, Y)) caseVoisines.add(new Voisin(X+1, Y));
+		}
+		if(Y<Parametres.getTAILLE_GRILLE()) {
+			if(!isVoisinObs(X, Y+1) && !isElementObs(X, Y+1)) caseVoisines.add(new Voisin(X, Y+1));
+		}
+		deleteVoisin(X, Y);
 	}
 
 	public void ajouterVisionAgent() {
-
 	    boolean elementAjoute = false;
-		int x = Environnement.agent.getX();
-		int y = Environnement.agent.getY();
+		int x = this.getX();
+		int y = this.getY();
 		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
 			int a = Environnement.ListEnvironement.get(i).getX();
 			int b = Environnement.ListEnvironement.get(i).getY();
@@ -69,6 +82,29 @@ public class Agent {
 			listElementObs.add(new Vide(x,y));
 		}
 
+	}
+	
+	public boolean isVoisinObs(int x, int y) {
+		for (Voisin v : caseVoisines) {
+			if(v.getX() == x && v.getY() == y) return true;
+		}
+		return false;
+	}
+	
+	public boolean isElementObs(int x, int y) {
+		for (Elements e : listElementObs) {
+			if(e.getX() == x && e.getY() == y) return true;
+		}
+		return false;
+	}
+	
+	public void deleteVoisin(int x, int y) {
+		int position = -1;
+		for (int i = 0; i < caseVoisines.size(); i++) {
+			Voisin v = caseVoisines.get(i);
+			if(v.getX() == x && v.getY() == y) position = i;
+		}
+		if(position>-1) caseVoisines.remove(position);	
 	}
 
 	/** ============================================ Mise ajour Etat ===========================================================================*/
@@ -84,7 +120,7 @@ public class Agent {
 			this.energieDepense++;
 			this.lastAction = HAUT;
 			this.setDirection(HAUT);
-			ajouterVisionAgent();
+			
 		}
 	}
 
@@ -94,7 +130,6 @@ public class Agent {
 			this.energieDepense++;
 			this.lastAction = BAS;
 			this.setDirection(BAS);
-			ajouterVisionAgent();
 		}
 	}
 
@@ -104,7 +139,6 @@ public class Agent {
 			this.energieDepense++;
 			this.lastAction = DROITE;
 			this.setDirection(DROITE);
-			ajouterVisionAgent();
 		}
 	}
 
@@ -114,7 +148,6 @@ public class Agent {
 			this.energieDepense++;
 			this.lastAction = GAUCHE;
 			this.setDirection(GAUCHE);
-			ajouterVisionAgent();
 		}
 	}
 
@@ -162,7 +195,8 @@ public class Agent {
 
 	/**=============================================== Reinitialisation ==============================================================================*/
 	public void reinitialiserAgent() {
-		Environnement.agent.listElementObs.removeAll(listElementObs);
+		this.listElementObs.removeAll(listElementObs);
+		this.caseVoisines.removeAll(caseVoisines);
 	}
 
 
@@ -233,6 +267,10 @@ public class Agent {
 	
 	public void setCaseViseeAvecCaillou(int [] CaseViseeAvecCaillou) {
 		this.caseViseeAvecCaillou = CaseViseeAvecCaillou;
+	}
+
+	public ArrayList<Voisin> getCaseVoisines() {
+		return caseVoisines;
 	}
 
 

@@ -30,6 +30,8 @@ public class GameRun implements Runnable{
 		while(true) {
 			if(Environnement.newCycle) {
 				observationAgent();
+				
+				Environnement.agent.observer();
 				drawingEnvironnement.render();
 				drawingAgent.render();
 				Environnement.newCycle = false;
@@ -96,6 +98,7 @@ public class GameRun implements Runnable{
 		placerHero();
 
 		Environnement.agent.ajouterVisionAgent();
+		Environnement.agent.observerVoisin();
 
 	}
 
@@ -248,6 +251,7 @@ public class GameRun implements Runnable{
 				
 			}	
 		}
+		
 
 	}
 

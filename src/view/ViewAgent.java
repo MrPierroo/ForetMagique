@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import com.sun.javafx.tk.Toolkit;
 
 import controler.ButtonHandler;
+import elements.Voisin;
 import model.Agent;
 import model.Elements;
 import model.Environnement;
@@ -161,14 +162,10 @@ public class ViewAgent{
 			}
 		}
 		
-		for (int i = 0; i < Environnement.agent.getListElementObs().size(); i++){
+		for (int i = 0; i < Environnement.agent.getListElementObs().size(); i++) {
 			Elements e = Environnement.agent.getListElementObs().get(i);
 			g.setColor(Color.white);
 			g.fillRect(CO(e.getX()), CO(e.getY()),T,T);
-		}
-
-		for (int i = 0; i < Environnement.agent.getListElementObs().size(); i++) {
-			Elements e = Environnement.agent.getListElementObs().get(i);
 			if(e.getNom() == Parametres.NOM_MONSTRE) {
 				g.drawImage(monstre,CO(e.getX()),CO(e.getY()),T,T,null);
 			}
@@ -184,6 +181,11 @@ public class ViewAgent{
 			if(e.getNom() == Parametres.NOM_CACA) {
 				g.drawImage(caca,CO(e.getX()),CO(e.getY()),T,T,null);
 			}
+		}
+		
+		for (Voisin v : Environnement.agent.getCaseVoisines()) {
+			g.setColor(Color.darkGray);
+			g.fillRect(CO(v.getX()), CO(v.getY()),T,T);
 		}
 
 		
