@@ -113,8 +113,8 @@ public class Agent {
 	}
 	
 	public void calculScore() {
-		for (Voisin v : caseVoisines) {
-			MoteurInference.calculerScore(v);
+		for (Elements e : listElementObs) {
+			MoteurInference.calculerScore(e);
 		}
 	}
 

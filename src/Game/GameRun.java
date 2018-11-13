@@ -101,6 +101,7 @@ public class GameRun implements Runnable{
 
 		Environnement.agent.ajouterVisionAgent();
 		Environnement.agent.observerVoisin();
+		Environnement.agent.calculScore();
 
 	}
 
