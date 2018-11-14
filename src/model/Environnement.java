@@ -25,6 +25,17 @@ public class Environnement {
 		return true;
 	}
 
+	public static boolean isAnythingOn(int x, int y){
+		for (int i = 0; i < ListEnvironement.size(); i++) {
+			int a = ListEnvironement.get(i).getX();
+			int b = ListEnvironement.get(i).getY();
+			if(x==a && y==b)
+				return false;
+		}
+		return true;
+	}
+
+
 
 	//retourne la position dans la liste d'un element souhaite en fonction de son type et de ses coordonnees
 	public static int indiceElementMonstre(int x, int y) {
@@ -102,7 +113,7 @@ public class Environnement {
 	public static void setMoyenneScore(double moyenneScore) {
 		Environnement.moyenneScore = moyenneScore;
 	}
-	
+
 	public static void reinitialiserEnvironnement() {
 		Environnement.ListEnvironement.removeAll(ListEnvironement);
 	}
@@ -190,7 +201,7 @@ public class Environnement {
 		}
 		return false;
 	}
-	
+
 	// -------------------------------------------------Supprimer un element-------------------------------------------------------------------------------
 
 	public static void removeMonstre(int x, int y) {
@@ -202,6 +213,6 @@ public class Environnement {
 			}
 		}
 	}
-	
+
 
 }
