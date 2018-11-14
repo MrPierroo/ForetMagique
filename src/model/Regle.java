@@ -2,6 +2,7 @@ package model;
 
 public class Regle {
 
+	String Nom;
 	Fait Premisse;
 	Fait Predicat;
 	
@@ -9,9 +10,14 @@ public class Regle {
 		
 	}
 	
-	public Regle(Fait premisse, Fait predicat) {
+	public Regle(String nom, Fait premisse, Fait predicat) {
+		Nom = nom;
 		Premisse = premisse;
 		Predicat = predicat;
+	}
+
+	public String getNom() {
+		return Nom;
 	}
 	
 	public Fait getPremisse() {

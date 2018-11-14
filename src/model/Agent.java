@@ -18,8 +18,8 @@ public class Agent {
 	public final int SORTIR = 6;
 
 	private ArrayList<Elements> listElementObs = new ArrayList<Elements>();
-	private ArrayList<Elements> baseDeFaits = new ArrayList<Elements>();
-	private ArrayList<Integer> baseDeRegles = new ArrayList<Integer>();
+	private ArrayList<Fait> BF = new ArrayList<Fait>();
+	private ArrayList<Regle> BR = new ArrayList<Regle>();
 	private ArrayList<Voisin> caseVoisines = new ArrayList<>();
 	private int lastAction;
 	private int direction = BAS;
@@ -43,11 +43,14 @@ public class Agent {
 	public void doCycle() {
 
 	}
+	
 	/** ============================================== Observation =============================================================================*/
+	
 	public void observer() {
 		ajouterVisionAgent();
 		observerVoisin();
 	}
+	
 	public void observerVoisin() {
 		int X = this.X; int Y = this.Y;
 		if(X-1>=0) {
@@ -108,9 +111,6 @@ public class Agent {
 	}
 
 	/** ============================================ Mise ajour Etat ===========================================================================*/
-	public void ajoutPerformance() {
-
-	}
 	
 	public void calculScore() {
 		for (Elements e : listElementObs) {
@@ -118,7 +118,7 @@ public class Agent {
 		}
 	}
 
-	/** ================================================ Action ================================================================================*/
+	/** ================================================ Actions ================================================================================*/
 	public void goUp(){
 		if(this.Y>0){
 			this.Y--;
@@ -191,8 +191,6 @@ public class Agent {
 	}
 
 	public void goSortir() {
-		int x = this.getX();
-		int y = this.getY();
 		this.energieDepense++;
 		this.lastAction = SORTIR;
 	}
@@ -202,6 +200,41 @@ public class Agent {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	/**=========================================== Construction base de regles ==============================================================================*/
+	
+	public static ArrayList<Regle> construireBR() {
+		
+		ArrayList<Regle> regles = null;
+		
+		
+		
+		//regles.add(new Regle("V0",ventObserve, ventPresent));
+		//regles.add(new Regle("C0",cacaObserve, cacaPresent));
+		
+		
+		return regles;
+		
+	}
+	
+	public static ArrayList<Fait> construireBF() {
+		
+		ArrayList<Fait> baseDeFaits = null;
+		
+		for(int x = 0 ; x<Parametres.getTAILLE_GRILLE() ; x++) {
+			for(int y = 0 ; y<Parametres.getTAILLE_GRILLE() ; y++) {
+				baseDeFaits.add(new Fait("ventObserve",false,x,y));
+				baseDeFaits.add(new Fait("cacaObserve",false,x,y));
+				baseDeFaits.add(new Fait("videObserve",false,x,y));
+				baseDeFaits.add(new Fait("portailObserve",false,x,y));
+				baseDeFaits.add(new Fait("monstreEn",false,x,y));
+				baseDeFaits.add(new Fait("crevasseEn",false,x,y));
+			}
+		}
+		
+		return baseDeFaits;
+	}
+	
 
 
 	/**=============================================== Reinitialisation ==============================================================================*/
@@ -256,14 +289,6 @@ public class Agent {
 		this.nombreCaillouxLances = nombreCaillouxLances;
 	}
 
-	public ArrayList<Elements> getBaseDeFaits() {
-		return baseDeFaits;
-	}
-
-	public ArrayList<Integer> getBaseDeRegles() {
-		return baseDeRegles;
-	}
-
 	public int getDirection() {
 		return direction;
 	}
@@ -282,6 +307,14 @@ public class Agent {
 
 	public ArrayList<Voisin> getCaseVoisines() {
 		return caseVoisines;
+	}
+	
+	public ArrayList<Fait> getBaseDeFaits() {
+		return BF;
+	}
+
+	public ArrayList<Regle> getBaseDeRegles() {
+		return BR;
 	}
 
 
