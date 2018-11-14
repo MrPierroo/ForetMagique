@@ -6,6 +6,51 @@ import elements.Voisin;
 
 public class MoteurInference {
 
+	
+	public ArrayList<Fait> chainageAvant(ArrayList<Fait> BF, ArrayList<Regle> BR, Fait F) {
+		
+		boolean regleApplicable = true;
+		
+		while(!BF.contains(F) && regleApplicable) {
+			if(isRegleApplicable(BR)) {
+				Regle regle = choisirUneRegle(BR);
+				remove(regle, BR);
+				BF.add(getConclusion(regle));
+			}
+			else regleApplicable = false;
+		}
+		if(BF.contains(F)) return BF;
+		
+	}
+	
+	
+	
+	
+	
+
+
+	// Verifier qu'au moins une regle est applicable
+	private boolean isRegleApplicable(ArrayList<Regle> BR) {
+		
+		return false;
+	}
+
+
+	private Regle choisirUneRegle(ArrayList<Regle> bR) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	private void remove(Regle regle, ArrayList<Regle> bR) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+
+
 	public static void calculerScore(Elements e) {
 		
 		/**Base de fait*/ // a mettre surement autre part ...
@@ -34,7 +79,7 @@ public class MoteurInference {
 		}
 		
 		else {
-			// inference à ajouter
+			// inference ï¿½ ajouter
 			
 		}
 	}
