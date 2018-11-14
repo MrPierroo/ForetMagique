@@ -15,19 +15,19 @@ public class MoteurInference {
 			if(isRegleApplicable(BR)) {
 				Regle regle = choisirUneRegle(BR);
 				remove(regle, BR);
-				BF.add(getConclusion(regle));
+				BF.add(regle.getPredicat());
 			}
 			else regleApplicable = false;
 		}
-		if(BF.contains(F)) return BF;
+		if(BF.contains(F)) {
+			//TODO 
+		}
+		
+		return BF;
 		
 	}
 	
 	
-	
-	
-	
-
 
 	// Verifier qu'au moins une regle est applicable
 	private boolean isRegleApplicable(ArrayList<Regle> BR) {
