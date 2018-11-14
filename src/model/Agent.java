@@ -196,6 +196,12 @@ public class Agent {
 		this.energieDepense++;
 		this.lastAction = SORTIR;
 	}
+	
+	// Atteindre une position depuis la position actuelle en ne passant que par des cases observees
+	public static void goTo(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 	/**=============================================== Reinitialisation ==============================================================================*/

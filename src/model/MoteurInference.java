@@ -12,15 +12,21 @@ public class MoteurInference {
 		boolean regleApplicable = true;
 		
 		while(!BF.contains(F) && regleApplicable) {
-			if(isRegleApplicable(BR)) {
-				Regle regle = choisirUneRegle(BR);
+			if(isRegleApplicable(BR, BF)) {
+				Regle regle = choisirUneRegle(BR, BF);
 				remove(regle, BR);
 				BF.add(regle.getPredicat());
 			}
 			else regleApplicable = false;
 		}
 		if(BF.contains(F)) {
-			//TODO 
+			// En gros notre fait a verifier serait portailVisible == true, donc on irait au portail dans cette condition
+			int x = F.getX();
+			int y = F.getY();
+			Agent.goTo(x,y);
+		}
+		else {
+			//TODO sinon il faut dire ce que l'on fait, ou est ce qu'on explore
 		}
 		
 		return BF;
@@ -30,23 +36,39 @@ public class MoteurInference {
 	
 
 	// Verifier qu'au moins une regle est applicable
-	private boolean isRegleApplicable(ArrayList<Regle> BR) {
-		
+	private boolean isRegleApplicable(ArrayList<Regle> BR, ArrayList<Fait> BF) {
+		for(int i = 0 ; i<BR.size() ; i++) {
+			for(int j = 0 ; j<BF.size() ; j++) {
+				if(BR.get(i).getPremisse() == BF.get(j)) {
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 
-
-	private Regle choisirUneRegle(ArrayList<Regle> bR) {
-		// TODO Auto-generated method stub
+	// Choisir une regle a analyser suivant heuristique ou autre... => pour l'instant c'est la premiere qui vient
+	private Regle choisirUneRegle(ArrayList<Regle> BR, ArrayList<Fait> BF) {
+		for(int i = 0 ; i<BR.size() ; i++) {
+			for(int j = 0 ; j<BF.size() ; j++) {
+				if(BR.get(i).getPremisse() == BF.get(j)) {
+					return BR.get(i);
+				}
+			}
+		}
 		return null;
 	}
 	
-	private void remove(Regle regle, ArrayList<Regle> bR) {
-		// TODO Auto-generated method stub
-		
+	// Enlever la regle choisie de BR
+	private void remove(Regle regle, ArrayList<Regle> BR) {
+		for(int i = 0 ; i<BR.size() ; i++) {
+			if(BR.get(i) == regle) {
+				BR.remove(i);
+			}
+		}
 	}
 
-
+	
 
 
 

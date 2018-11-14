@@ -14,6 +14,10 @@ public class Regle {
 		Predicat = predicat;
 	}
 	
+	public Fait getPremisse() {
+		return Premisse;
+	}
+	
 	public Fait getPredicat() {
 		return Predicat;
 	}
