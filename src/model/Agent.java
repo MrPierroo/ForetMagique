@@ -82,7 +82,7 @@ public class Agent {
 		}
 
 		if(elementAjoute == false) {
-			if(elementNonObserve(new Vide(x,y))) listElementObs.add(new Vide(x,y));
+			if(elementNonObserve(new Vide(x,y)) && videEn(x,y)) listElementObs.add(new Vide(x,y));
 		}
 
 	}
@@ -97,6 +97,22 @@ public class Agent {
 				return false;
 			}
 		}
+		return true;
+	}
+	
+	public boolean videEn(int x, int y) {
+		for(int i = 0 ; i<listElementObs.size() ; i++) {
+			int a = listElementObs.get(i).getX();
+			int b = listElementObs.get(i).getY();
+			if(x == a && y == b && (listElementObs.get(i).getNom() == Parametres.NOM_PORTAIL 
+					|| listElementObs.get(i).getNom() == Parametres.NOM_CACA
+					|| listElementObs.get(i).getNom() == Parametres.NOM_VENT
+					|| listElementObs.get(i).getNom() == Parametres.NOM_MONSTRE
+					|| listElementObs.get(i).getNom() == Parametres.NOM_CREVASSE)) {
+				return false;
+			}
+		}
+		
 		return true;
 	}
 	

@@ -48,7 +48,7 @@ public class GameRun implements Runnable{
 				Environnement.agent.observer();
 				Environnement.agent.calculScore();
 				
-			//	System.out.println(Environnement.agent.getListElementObs());
+				System.out.println(Environnement.agent.getListElementObs());
 				
 				BF.clear();
 				BR.clear();
