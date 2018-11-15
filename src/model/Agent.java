@@ -20,7 +20,20 @@ public class Agent {
 	private ArrayList<Elements> listElementObs = new ArrayList<Elements>();
 	private ArrayList<Fait> BF = new ArrayList<Fait>();
 	private ArrayList<Regle> BR = new ArrayList<Regle>();
-	private ArrayList<Voisin> caseVoisines = new ArrayList<>();
+	
+	// liste de case incertaines
+	private ArrayList<Voisin> frontiere = new ArrayList<>();// case frontiere incertaine
+	private ArrayList<Voisin> caseMin1 = new ArrayList<>();	// case comportant au moin 1 danger a proximiter
+	private ArrayList<Voisin> caseMin2 = new ArrayList<>();	// case comportant au moin 2 danger a proximiter
+	
+	// liste de case Certaines
+	private ArrayList<Voisin> case0 = new ArrayList<>();	// case comportant 0 danger a proximiter donc sure
+	private ArrayList<Voisin> case1 = new ArrayList<>();	// case comportant 1 danger a proximiter
+	private ArrayList<Voisin> case2 = new ArrayList<>();	// case comportant 2 danger a proximiter
+	private ArrayList<Voisin> case3 = new ArrayList<>();	// case comportant 3 danger a proximiter
+	private ArrayList<Voisin> caseMonstre = new ArrayList<>();	// case monstre certain
+	private ArrayList<Voisin> caseGouffre = new ArrayList<>();	// case gouffre certain
+	
 	private int lastAction;
 	private int direction = BAS;
 	private int energieDepense = 0;
@@ -43,6 +56,10 @@ public class Agent {
 	public void doCycle() {
 
 	}
+	/** ============================================== Inference =============================================================================*/
+	public void chercherCible() {
+		
+	}
 	
 	/** ============================================== Observation =============================================================================*/
 	
@@ -54,16 +71,16 @@ public class Agent {
 	public void observerVoisin() {
 		int X = this.X; int Y = this.Y;
 		if(X-1>=0) {
-			if(!isVoisinObs(X-1, Y) && !isElementObs(X-1, Y)) caseVoisines.add(new Voisin(X-1, Y));
+			if(!isVoisinObs(X-1, Y) && !isElementObs(X-1, Y)) frontiere.add(new Voisin(X-1, Y));
 		}
 		if(Y-1>=0) {
-			if(!isVoisinObs(X, Y-1) && !isElementObs(X, Y-1)) caseVoisines.add(new Voisin(X, Y-1));
+			if(!isVoisinObs(X, Y-1) && !isElementObs(X, Y-1)) frontiere.add(new Voisin(X, Y-1));
 		}
 		if(X<Parametres.getTAILLE_GRILLE()) {
-			if(!isVoisinObs(X+1, Y) && !isElementObs(X+1, Y)) caseVoisines.add(new Voisin(X+1, Y));
+			if(!isVoisinObs(X+1, Y) && !isElementObs(X+1, Y)) frontiere.add(new Voisin(X+1, Y));
 		}
 		if(Y<Parametres.getTAILLE_GRILLE()) {
-			if(!isVoisinObs(X, Y+1) && !isElementObs(X, Y+1)) caseVoisines.add(new Voisin(X, Y+1));
+			if(!isVoisinObs(X, Y+1) && !isElementObs(X, Y+1)) frontiere.add(new Voisin(X, Y+1));
 		}
 		deleteVoisin(X, Y);
 	}
@@ -101,7 +118,7 @@ public class Agent {
 	}
 	
 	public boolean isVoisinObs(int x, int y) {
-		for (Voisin v : caseVoisines) {
+		for (Voisin v : frontiere) {
 			if(v.getX() == x && v.getY() == y) return true;
 		}
 		return false;
@@ -116,11 +133,11 @@ public class Agent {
 	
 	public void deleteVoisin(int x, int y) {
 		int position = -1;
-		for (int i = 0; i < caseVoisines.size(); i++) {
-			Voisin v = caseVoisines.get(i);
+		for (int i = 0; i < frontiere.size(); i++) {
+			Voisin v = frontiere.get(i);
 			if(v.getX() == x && v.getY() == y) position = i;
 		}
-		if(position>-1) caseVoisines.remove(position);	
+		if(position>-1) frontiere.remove(position);	
 	}
 	
 	/** utilise dans nouvelle version*/
@@ -261,7 +278,7 @@ public class Agent {
 	/**=============================================== Reinitialisation ==============================================================================*/
 	public void reinitialiserAgent() {
 		this.listElementObs.removeAll(listElementObs);
-		this.caseVoisines.removeAll(caseVoisines);
+		this.frontiere.clear();
 	}
 
 
@@ -326,8 +343,8 @@ public class Agent {
 		this.caseViseeAvecCaillou = CaseViseeAvecCaillou;
 	}
 
-	public ArrayList<Voisin> getCaseVoisines() {
-		return caseVoisines;
+	public ArrayList<Voisin> getCaseVoisinesFrontiere() {
+		return frontiere;
 	}
 	
 	public ArrayList<Fait> getBaseDeFaits() {
@@ -336,6 +353,38 @@ public class Agent {
 
 	public ArrayList<Regle> getBaseDeRegles() {
 		return BR;
+	}
+
+	public ArrayList<Voisin> getCaseMin1() {
+		return caseMin1;
+	}
+
+	public ArrayList<Voisin> getCaseMin2() {
+		return caseMin2;
+	}
+
+	public ArrayList<Voisin> getCase0() {
+		return case0;
+	}
+
+	public ArrayList<Voisin> getCase1() {
+		return case1;
+	}
+
+	public ArrayList<Voisin> getCase2() {
+		return case2;
+	}
+
+	public ArrayList<Voisin> getCase3() {
+		return case3;
+	}
+
+	public ArrayList<Voisin> getCaseMonstre() {
+		return caseMonstre;
+	}
+
+	public ArrayList<Voisin> getCaseGouffre() {
+		return caseGouffre;
 	}
 
 
