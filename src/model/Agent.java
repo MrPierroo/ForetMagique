@@ -109,6 +109,17 @@ public class Agent {
 		}
 		if(position>-1) caseVoisines.remove(position);	
 	}
+	
+	public ArrayList<Elements> getElementObsAt(int x, int y){
+		ArrayList<Elements> listElement = new ArrayList<>();
+		
+		for (Elements elements : listElementObs) {
+			if(elements.getX() == x && elements.getY() == y) listElement.add(elements);
+		}
+		if(listElement.isEmpty()) listElement.addAll(new Vide(x,y));
+		
+		return listElement;
+	}
 
 	/** ============================================ Mise ajour Etat ===========================================================================*/
 	
