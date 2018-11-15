@@ -110,13 +110,17 @@ public class Agent {
 		if(position>-1) caseVoisines.remove(position);	
 	}
 	
+	/** utilise dans nouvelle version*/
 	public ArrayList<Elements> getElementObsAt(int x, int y){
 		ArrayList<Elements> listElement = new ArrayList<>();
 		
 		for (Elements elements : listElementObs) {
 			if(elements.getX() == x && elements.getY() == y) listElement.add(elements);
 		}
+<<<<<<< Updated upstream
 		if(listElement.isEmpty()) listElement.add(new Vide(x,y));
+=======
+>>>>>>> Stashed changes
 		
 		return listElement;
 	}
@@ -124,9 +128,7 @@ public class Agent {
 	/** ============================================ Mise ajour Etat ===========================================================================*/
 	
 	public void calculScore() {
-		for (Elements e : listElementObs) {
-			MoteurInference.calculerScore(e);
-		}
+		
 	}
 
 	/** ================================================ Actions ================================================================================*/
