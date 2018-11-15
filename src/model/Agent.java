@@ -116,7 +116,7 @@ public class Agent {
 		for (Elements elements : listElementObs) {
 			if(elements.getX() == x && elements.getY() == y) listElement.add(elements);
 		}
-		if(listElement.isEmpty()) listElement.addAll(new Vide(x,y));
+		if(listElement.isEmpty()) listElement.add(new Vide(x,y));
 		
 		return listElement;
 	}

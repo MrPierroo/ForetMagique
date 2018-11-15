@@ -25,11 +25,11 @@ public class Regle {
 		return this.nom;
 	}
 	
-	public ArrayList<Fait> getPremisse() {
+	public ArrayList<Fait> getPremisses() {
 		return this.premisses;
 	}
 	
-	public Fait getPredicat() {
+	public Fait getConclusion() {
 		return this.conclusion;
 	}
 	
