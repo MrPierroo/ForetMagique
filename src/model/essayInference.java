@@ -4,22 +4,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.omg.Messaging.SyncScopeHelper;
+
 public class essayInference {
 	public static void main(String[] args) {
 		ArrayList<Fait> BF = new ArrayList<Fait>();
 		ArrayList<Regle> BR = new ArrayList<Regle>();
 
 		//constitution de la base de fait:
-		//BF.addAll(initialiserBaseDeFait()); //remplir la base de fait en fonction de l'état de l'environnement
-		BF.add(Fait.estSurVide);
-		BF.add(Fait.nonDecouvertEnHaut);
-		BF.add(Fait.nonDecouvertADroite);
-		BF.add(Fait.nonDecouvertEnBas);
-		BF.add(Fait.nonDecouvertAGauche);
-		BF.add(Fait.pasSurBordBas);
-		BF.add(Fait.pasSurBordDroite);
-		BF.add(Fait.pasSurBordGauche);
-		
+		BF.addAll(initialiserBaseDeFait()); //remplir la base de fait en fonction de l'état de l'environnement		
 		BR.addAll(remplirBaseDeRegle());
 		
 		ArrayList<Fait> faitsElementaires = new ArrayList<Fait>();
@@ -34,6 +27,7 @@ public class essayInference {
 		System.out.println(BR);
 		ArrayList<Regle> reglesAsupprimer = new ArrayList<Regle>();
 		while(Collections.disjoint(BF, faitsElementaires)) {
+			
 			for(Regle R : BR){
 				if(R.isApplicable(BF))
 				{
@@ -43,15 +37,43 @@ public class essayInference {
 					if(faitsElementaires.contains(R.getConclusion()))
 						break;
 				}
+			
 			}
+			
 			BR.removeAll(reglesAsupprimer);
 			reglesAsupprimer.clear();
+			
 		}
 		System.out.println(BF);
 		System.out.println(BR);
 
 
 
+	}
+	
+	public static String moteurInference(ArrayList<Fait> BF, ArrayList<Regle> BR, ArrayList<Fait> buts){
+		
+		ArrayList<Regle> reglesAsupprimer = new ArrayList<Regle>();
+		boolean noSolution = false;
+		while(Collections.disjoint(BF, buts) && !noSolution) {
+			noSolution = true;
+			for(Regle R : BR){
+				if(R.isApplicable(BF))
+				{
+					noSolution = false;
+					BF.add(R.getConclusion());
+					reglesAsupprimer.add(R);
+					if(buts.contains(R.getConclusion()))
+						break;
+				}
+			}
+			BR.removeAll(reglesAsupprimer);
+			reglesAsupprimer.clear();
+		}
+		
+		ArrayList<Fait> mouvements = new ArrayList<Fait>(BF);
+		mouvements.retainAll(buts);
+		return mouvements.toString();
 	}
 
 	public static ArrayList<Regle> remplirBaseDeRegle() {

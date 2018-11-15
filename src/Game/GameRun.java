@@ -29,6 +29,16 @@ public class GameRun implements Runnable{
 		drawingAgent.render();
 		System.out.println("Initialisation effectuee ! ");
 		
+		ArrayList<Fait> BF = new ArrayList<Fait>();
+		ArrayList<Regle> BR = new ArrayList<Regle>();
+		ArrayList<Fait> buts = new ArrayList<Fait>();
+		buts.add(Fait.haut);
+		buts.add(Fait.droite);
+		buts.add(Fait.bas);
+		buts.add(Fait.gauche);
+		buts.add(Fait.tirer);
+		buts.add(Fait.sortir);
+		
 		while(true) {
 			
 			if(Environnement.newCycle) {
@@ -38,11 +48,15 @@ public class GameRun implements Runnable{
 				Environnement.agent.observer();
 				Environnement.agent.calculScore();
 				
-				System.out.println(Environnement.agent.getListElementObs());
+			//	System.out.println(Environnement.agent.getListElementObs());
 				
-				ArrayList<Fait> BF = new ArrayList<Fait>();
+				BF.clear();
+				BR.clear();
 				BF.addAll(essayInference.initialiserBaseDeFait());
-				System.out.println(BF);
+				BR.addAll(essayInference.remplirBaseDeRegle());
+				
+			//	System.out.println(BF);
+				System.out.println(essayInference.moteurInference(BF, BR, buts));
 				
 				drawingEnvironnement.render();
 				drawingAgent.render();
