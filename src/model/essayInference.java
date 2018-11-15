@@ -54,18 +54,19 @@ public class essayInference {
 	public static String moteurInference(ArrayList<Fait> BF, ArrayList<Regle> BR, ArrayList<Fait> buts){
 		
 		ArrayList<Regle> reglesAsupprimer = new ArrayList<Regle>();
-		boolean noSolution = false;
-		while(Collections.disjoint(BF, buts) && !noSolution) {
-			noSolution = true;
+		boolean isAnyRuleApplicable = true;
+		while(isAnyRuleApplicable) {
+			isAnyRuleApplicable = false;
 			for(Regle R : BR){
 				if(R.isApplicable(BF))
 				{
-					noSolution = false;
+					isAnyRuleApplicable = true;
 					BF.add(R.getConclusion());
 					reglesAsupprimer.add(R);
 					if(buts.contains(R.getConclusion()))
 						break;
 				}
+
 			}
 			BR.removeAll(reglesAsupprimer);
 			reglesAsupprimer.clear();
@@ -107,6 +108,8 @@ public class essayInference {
 		regles.add(new Regle("R14", new ArrayList<Fait>(){{add(Fait.estSurVide); add(Fait.nonDecouvertAGauche);}}, Fait.decisionAllerGauche));
 		regles.add(new Regle("R15", new ArrayList<Fait>(){{add(Fait.estSurCaca); add(Fait.videAGauche);}}, Fait.decisionAllerGauche));
 		regles.add(new Regle("R16", new ArrayList<Fait>(){{add(Fait.estSurVent); add(Fait.videAGauche);}}, Fait.decisionAllerGauche));
+	//	regles.add(new Regle("R17", new ArrayList<Fait>(){{add(Fait.estSurVide); add(Fait.cacaEnHaut); add(Fait.cacaADroite);}}, Fait.decisionAllerGauche));
+		
 
 		return regles;
 	}
