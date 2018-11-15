@@ -13,6 +13,13 @@ public class Regle {
 		this.premisses = new ArrayList<>();
 		this.conclusion = conclusion;
 	}
+	
+	public boolean isApplicable(ArrayList<Fait> BF) {
+		for (Fait f : this.premisses) {
+			if(!BF.contains(f)) return false;
+		}
+		return true;
+	}
 
 	public String getNom() {
 		return this.nom;
