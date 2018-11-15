@@ -11,9 +11,12 @@ public enum Fait {
 	existeCase1,
 	existeCase2,
 	existeCase3,
+	existeCase4,
 	NotExistCase0,
 	NotExisteCase1,
 	NotExisteCase2,
+	NotExisteCase3,
+	NotExisteCase4,
 	
 	caseMin1,
 	caseMin2,

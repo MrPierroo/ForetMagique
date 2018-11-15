@@ -48,6 +48,10 @@ public class MoteurInference {
 		//Est ce qu il y a des case sure de niveau 2 ou non
 		if(Environnement.agent.getCase2().isEmpty()) baseDeFaitsInit.add(Fait.NotExisteCase2);
 		else baseDeFaitsInit.add(Fait.existeCase2);
+		if(Environnement.agent.getCase2().isEmpty()) baseDeFaitsInit.add(Fait.NotExisteCase3);
+		else baseDeFaitsInit.add(Fait.existeCase3);
+		if(Environnement.agent.getCase2().isEmpty()) baseDeFaitsInit.add(Fait.NotExisteCase4);
+		else baseDeFaitsInit.add(Fait.existeCase4);
 		
 		//Est ce qu il y a des case non teste ou non
 		if(Environnement.agent.getCaseVoisinesFrontiere().isEmpty()) baseDeFaitsInit.add(Fait.allCaseTest0);

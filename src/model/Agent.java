@@ -19,7 +19,7 @@ public class Agent {
 
 	private ArrayList<Elements> listElementObs = new ArrayList<Elements>();
 	private ArrayList<Fait> BF = new ArrayList<Fait>();
-	private ArrayList<Regle> BR = new ArrayList<Regle>();
+	private ArrayList<Regle> BR = MoteurInference.initBaseRegle();
 	
 	// liste de case incertaines
 	private ArrayList<Voisin> frontiere = new ArrayList<>();// case frontiere incertaine
@@ -31,6 +31,7 @@ public class Agent {
 	private ArrayList<Voisin> case1 = new ArrayList<>();	// case comportant 1 danger a proximiter
 	private ArrayList<Voisin> case2 = new ArrayList<>();	// case comportant 2 danger a proximiter
 	private ArrayList<Voisin> case3 = new ArrayList<>();	// case comportant 3 danger a proximiter
+	private ArrayList<Voisin> case4 = new ArrayList<>();	// case comportant 4 danger a proximiter
 	private ArrayList<Voisin> caseMonstre = new ArrayList<>();	// case monstre certain
 	private ArrayList<Voisin> caseGouffre = new ArrayList<>();	// case gouffre certain
 	
@@ -58,9 +59,11 @@ public class Agent {
 	}
 	/** ============================================== Inference =============================================================================*/
 	public void chercherCible() {
-		BR = MoteurInference.initBaseRegle();
-		BF = MoteurInference.initBaseDeFait();
-		
+		boolean cibleTrouve = false;
+		while(!cibleTrouve) {
+			BF = MoteurInference.initBaseDeFait();
+			
+		}
 	}
 	
 	public void test0() {
@@ -69,17 +72,19 @@ public class Agent {
 		
 		if(v.getNbDanger() == 0) case0.add(v);
 		else if(v.getNbDanger() == 1) case1.add(v);
-		else caseMin2.add(v);
+		else if(v.getNbDanger() == 2) case2.add(v);
+		else if(v.getNbDanger() == 3) case3.add(v);
+		else if(v.getNbDanger() == 4) case4.add(v);
 	}
 	
-	public void test2() {
+	/*public void test2() {
 		Voisin v = caseMin2.get(0);
 		frontiere.remove(0);
 		
 		if(v.getNbDanger() == 1){
 			//if()
 		}
-	}
+	}*/
 	
 	/** ============================================== Observation =============================================================================*/
 	
