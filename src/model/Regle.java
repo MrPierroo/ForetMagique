@@ -1,31 +1,29 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Regle {
 
-	String Nom;
-	Fait Premisse;
-	Fait Predicat;
+	String nom;
+	ArrayList<Fait> premisses;
+	Fait conclusion;
 	
-	public Regle() {
-		
-	}
-	
-	public Regle(String nom, Fait premisse, Fait predicat) {
-		Nom = nom;
-		Premisse = premisse;
-		Predicat = predicat;
+	public Regle(String nom, ArrayList<Fait> premisses, Fait conclusion) {
+		this.nom = nom;
+		this.premisses = new ArrayList<>();
+		this.conclusion = conclusion;
 	}
 
 	public String getNom() {
-		return Nom;
+		return this.nom;
 	}
 	
-	public Fait getPremisse() {
-		return Premisse;
+	public ArrayList<Fait> getPremisse() {
+		return this.premisses;
 	}
 	
 	public Fait getPredicat() {
-		return Predicat;
+		return this.conclusion;
 	}
 	
 }

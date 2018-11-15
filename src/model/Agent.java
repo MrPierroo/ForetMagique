@@ -217,7 +217,7 @@ public class Agent {
 		
 	}
 	
-	public static ArrayList<Fait> construireBF() {
+	/*public static ArrayList<Fait> construireBF() {
 		
 		ArrayList<Fait> baseDeFaits = null;
 		
@@ -233,7 +233,7 @@ public class Agent {
 		}
 		
 		return baseDeFaits;
-	}
+	}*/
 	
 
 

@@ -7,7 +7,7 @@ import elements.Voisin;
 public class MoteurInference {
 
 	
-	public ArrayList<Fait> chainageAvant(ArrayList<Fait> BF, ArrayList<Regle> BR, Fait F) {
+	/*public ArrayList<Fait> chainageAvant(ArrayList<Fait> BF, ArrayList<Regle> BR, Fait F) {
 		
 		boolean regleApplicable = true;
 		
@@ -71,12 +71,12 @@ public class MoteurInference {
 	
 
 
-
+*/
 
 	public static void calculerScore(Elements e) {
 		
 		/**Base de fait*/ // a mettre surement autre part ...
-		int X = e.getX();
+	/*	int X = e.getX();
 		int Y = e.getY();
 		
 		ArrayList<Elements> elementObsVoisin = new ArrayList<>();
@@ -92,7 +92,7 @@ public class MoteurInference {
 			int y = v.getY();
 			if( (x==X && Math.abs(Y-y)==1) || (y==Y && Math.abs(X-x)==1)) voisinProche.add(v);
 		}
-		/** */
+		
 		// y a til une case vide proche
 		if(Inference.isVide(e)) {
 			for (Voisin voisin : voisinProche) {
@@ -103,7 +103,7 @@ public class MoteurInference {
 		else {
 			// inference � ajouter
 			
-		}
+		}*/
 	}
 
 }
