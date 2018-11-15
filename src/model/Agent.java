@@ -75,16 +75,29 @@ public class Agent {
 		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
 			int a = Environnement.ListEnvironement.get(i).getX();
 			int b = Environnement.ListEnvironement.get(i).getY();
-			if(x==a && y==b) {
+			if(x == a && y == b && elementNonObserve(Environnement.ListEnvironement.get(i))) {
 				listElementObs.add(Environnement.ListEnvironement.get(i));
 				elementAjoute = true;
 			}
 		}
 
 		if(elementAjoute == false) {
-			listElementObs.add(new Vide(x,y));
+			if(elementNonObserve(new Vide(x,y))) listElementObs.add(new Vide(x,y));
 		}
 
+	}
+	
+	public boolean elementNonObserve(Elements e) {
+		int x = e.getX();
+		int y = e.getY();
+		for(int i = 0 ; i<listElementObs.size() ; i++) {
+			int a = listElementObs.get(i).getX();
+			int b = listElementObs.get(i).getY();
+			if(x == a && y == b && e.getNom() == listElementObs.get(i).getNom()) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public boolean isVoisinObs(int x, int y) {
