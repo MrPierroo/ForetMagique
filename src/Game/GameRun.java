@@ -65,9 +65,6 @@ public class GameRun implements Runnable{
 			}
 			if(GameRun.demandeNouveauNiveau) {
 				System.out.println("Initialisation du niveau "+Parametres.getNiveau()+" ... ");
-				for(int i = 0 ; i<Environnement.agent.getListElementObs().size() ; i++) {
-					System.out.println(Environnement.agent.getListElementObs().get(i).getNom());
-				}
 				initialisationEnvironnement(Parametres.getNiveau());
 				drawingEnvironnement.render();
 				drawingAgent.render();
