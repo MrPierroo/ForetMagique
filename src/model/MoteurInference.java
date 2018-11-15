@@ -6,7 +6,152 @@ import elements.Voisin;
 
 public class MoteurInference {
 
+	private ArrayList<Fait> BaseFait;
+	private ArrayList<Regle> BaseRegle;
 	
+	public MoteurInference() {
+		BaseFait = new ArrayList<>();
+		BaseRegle = new ArrayList<>();
+		initBaseRegle();
+		initBaseRegle();
+	}
+	
+	public void  initBaseRegle() {
+
+		//regle principale
+		BaseRegle.add(new Regle("R0", new ArrayList<Fait>(){{add(Fait.estSurPortail);}}, Fait.sortir));
+
+		//regles de mouvements
+		BaseRegle.add(new Regle("R1", new ArrayList<Fait>(){{add(Fait.decisionAllerHaut); add(Fait.pasSurBordHaut);}}, Fait.haut));
+		BaseRegle.add(new Regle("R2", new ArrayList<Fait>(){{add(Fait.decisionAllerDroite); add(Fait.pasSurBordDroite);}}, Fait.droite));
+		BaseRegle.add(new Regle("R3", new ArrayList<Fait>(){{add(Fait.decisionAllerBas); add(Fait.pasSurBordBas);}}, Fait.bas));
+		BaseRegle.add(new Regle("R4", new ArrayList<Fait>(){{add(Fait.decisionAllerGauche); add(Fait.pasSurBordGauche);}}, Fait.gauche));
+
+		//regles impliquant un déplacement en haut
+		BaseRegle.add(new Regle("R5", new ArrayList<Fait>(){{add(Fait.estSurVide); add(Fait.nonDecouvertEnHaut);}}, Fait.decisionAllerHaut));
+		BaseRegle.add(new Regle("R6", new ArrayList<Fait>(){{add(Fait.estSurCaca); add(Fait.videEnHaut);}}, Fait.decisionAllerHaut));
+		BaseRegle.add(new Regle("R7", new ArrayList<Fait>(){{add(Fait.estSurVent); add(Fait.videEnHaut);}}, Fait.decisionAllerHaut));
+
+		//regles impliquant un déplacement en bas
+		BaseRegle.add(new Regle("R8", new ArrayList<Fait>(){{add(Fait.estSurVide); add(Fait.nonDecouvertADroite);}}, Fait.decisionAllerDroite));
+		BaseRegle.add(new Regle("R9", new ArrayList<Fait>(){{add(Fait.estSurCaca); add(Fait.videADroite);}}, Fait.decisionAllerDroite));
+		BaseRegle.add(new Regle("R10", new ArrayList<Fait>(){{add(Fait.estSurVent); add(Fait.videADroite);}}, Fait.decisionAllerDroite));
+
+		//regles impliquant un déplacement à droite
+		BaseRegle.add(new Regle("R11", new ArrayList<Fait>(){{add(Fait.estSurVide); add(Fait.nonDecouvertEnBas);}}, Fait.decisionAllerBas));
+		BaseRegle.add(new Regle("R12", new ArrayList<Fait>(){{add(Fait.estSurCaca); add(Fait.videEnBas);}}, Fait.decisionAllerBas));
+		BaseRegle.add(new Regle("R13", new ArrayList<Fait>(){{add(Fait.estSurVent); add(Fait.videEnBas);}}, Fait.decisionAllerBas));
+
+		//Regles impliquant un déplacement à gauche
+		BaseRegle.add(new Regle("R14", new ArrayList<Fait>(){{add(Fait.estSurVide); add(Fait.nonDecouvertAGauche);}}, Fait.decisionAllerGauche));
+		BaseRegle.add(new Regle("R15", new ArrayList<Fait>(){{add(Fait.estSurCaca); add(Fait.videAGauche);}}, Fait.decisionAllerGauche));
+		BaseRegle.add(new Regle("R16", new ArrayList<Fait>(){{add(Fait.estSurVent); add(Fait.videAGauche);}}, Fait.decisionAllerGauche));
+	}
+
+	public void initBaseDeFait() {
+		BaseFait.clear();
+		int X = Environnement.agent.getX();
+		int Y = Environnement.agent.getY();
+
+		/** fait lies a la position*/
+		if(X > 0) BaseFait.add(Fait.pasSurBordHaut);
+		if(Y > 0) BaseFait.add(Fait.pasSurBordGauche);
+		if(X < (Parametres.getTAILLE_GRILLE()-1) ) BaseFait.add(Fait.pasSurBordBas);
+		if(Y < (Parametres.getTAILLE_GRILLE()-1) ) BaseFait.add(Fait.pasSurBordDroite);
+
+		/** fait lies au type des cases ou se trouve l agent*/
+		for(Elements e : Environnement.agent.getListElementObs()) {
+			if(e.getX() == X && e.getY() == Y) {
+				switch (e.getNom()) {
+
+				case Parametres.NOM_CACA: BaseFait.add(Fait.estSurCaca);
+				break;
+
+				case Parametres.NOM_VENT: BaseFait.add(Fait.estSurVent);
+				break;
+
+				case Parametres.NOM_PORTAIL: BaseFait.add(Fait.estSurPortail);
+				break;
+
+				case Parametres.NOM_VIDE: BaseFait.add(Fait.estSurVide);
+				break;
+
+				default:
+					break;
+				}
+			}
+			if(e.getX() == X && e.getY() == (Y-1) ) {
+				switch (e.getNom()) {
+
+				case Parametres.NOM_CACA: BaseFait.add(Fait.cacaEnHaut);
+				break;
+
+				case Parametres.NOM_VENT: BaseFait.add(Fait.ventEnHaut);
+				break;
+				
+				case Parametres.NOM_VIDE: BaseFait.add(Fait.videEnHaut);
+				break;
+
+				default:
+					break;
+				}
+			}
+			if(e.getX() == X && e.getY() == (Y+1) ) {
+				switch (e.getNom()) {
+
+				case Parametres.NOM_CACA: BaseFait.add(Fait.cacaEnBas);
+				break;
+
+				case Parametres.NOM_VENT: BaseFait.add(Fait.ventEnBas);
+				break;
+				
+				case Parametres.NOM_VIDE: BaseFait.add(Fait.videEnBas);
+				break;
+
+				default:
+					break;
+				}
+			}
+			if(e.getX() == (X+1) && e.getY() == Y) {
+				switch (e.getNom()) {
+
+				case Parametres.NOM_CACA: BaseFait.add(Fait.cacaADroite);
+				break;
+
+				case Parametres.NOM_VENT: BaseFait.add(Fait.ventADroite);
+				break;
+				
+				case Parametres.NOM_VIDE: BaseFait.add(Fait.videADroite);
+				break;
+
+				default:
+					break;
+				}
+			}
+			if(e.getX() == X && e.getY() == (Y-1) ) {
+				switch (e.getNom()) {
+
+				case Parametres.NOM_CACA: BaseFait.add(Fait.cacaAGauche);
+				break;
+
+				case Parametres.NOM_VENT: BaseFait.add(Fait.ventAGauche);
+				break;
+				
+				case Parametres.NOM_VIDE: BaseFait.add(Fait.videAGauche);
+				break;
+
+				default:
+					break;
+				}
+			}
+
+		}
+
+		if(Environnement.agent.getElementObsAt(X-1, Y).isEmpty() && X>0)  BaseFait.add( Fait.nonDecouvertADroite);
+		if(Environnement.agent.getElementObsAt(X+1, Y).isEmpty() && X<(Parametres.getTAILLE_GRILLE() -1))  BaseFait.add( Fait.nonDecouvertAGauche);
+		if(Environnement.agent.getElementObsAt(X, Y-1).isEmpty() && Y>0)  BaseFait.add( Fait.nonDecouvertEnHaut);
+		if(Environnement.agent.getElementObsAt(X, Y+1).isEmpty() && Y<(Parametres.getTAILLE_GRILLE() -1))  BaseFait.add( Fait.nonDecouvertEnBas);
+	}
 	/*public ArrayList<Fait> chainageAvant(ArrayList<Fait> BF, ArrayList<Regle> BR, Fait F) {
 		
 		boolean regleApplicable = true;
@@ -68,42 +213,5 @@ public class MoteurInference {
 		}
 	}
 
-	
-
-
 */
-
-	public static void calculerScore(Elements e) {
-		
-		/**Base de fait*/ // a mettre surement autre part ...
-	/*	int X = e.getX();
-		int Y = e.getY();
-		
-		ArrayList<Elements> elementObsVoisin = new ArrayList<>();
-		ArrayList<Voisin> voisinProche = new ArrayList<>();
-		
-		for (Elements elements : Environnement.agent.getListElementObs()) {
-			int x = elements.getX();
-			int y = elements.getY();
-			if( (x==X && Math.abs(Y-y)==1) || (y==Y && Math.abs(X-x)==1)) elementObsVoisin.add(elements);
-		}
-		for (Voisin v : Environnement.agent.getCaseVoisines()) {
-			int x = v.getX();
-			int y = v.getY();
-			if( (x==X && Math.abs(Y-y)==1) || (y==Y && Math.abs(X-x)==1)) voisinProche.add(v);
-		}
-		
-		// y a til une case vide proche
-		if(Inference.isVide(e)) {
-			for (Voisin voisin : voisinProche) {
-				voisin.setScoreDanger(0);
-			}
-		}
-		
-		else {
-			// inference ï¿½ ajouter
-			
-		}*/
-	}
-
 }
