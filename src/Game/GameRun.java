@@ -1,5 +1,7 @@
 package Game;
 
+import java.util.ArrayList;
+
 import controler.ButtonHandler;
 import elements.Caca;
 import elements.Crevasse;
@@ -26,16 +28,25 @@ public class GameRun implements Runnable{
 		drawingEnvironnement.render();
 		drawingAgent.render();
 		System.out.println("Initialisation effectuee ! ");
-
+		
 		while(true) {
+			
 			if(Environnement.newCycle) {
 				
 				observationAgent();
+				
 				Environnement.agent.observer();
 				Environnement.agent.calculScore();
 				
+				System.out.println(Environnement.agent.getListElementObs());
+				
+				ArrayList<Fait> BF = new ArrayList<Fait>();
+				BF.addAll(essayInference.initialiserBaseDeFait());
+				System.out.println(BF);
+				
 				drawingEnvironnement.render();
 				drawingAgent.render();
+				
 				Environnement.newCycle = false;
 			}
 			if(GameRun.demandeNouveauNiveau) {

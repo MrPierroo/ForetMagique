@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 public class essayInference {
 	public static void main(String[] args) {
@@ -9,13 +10,51 @@ public class essayInference {
 		ArrayList<Regle> BR = new ArrayList<Regle>();
 
 		//constitution de la base de fait:
-		BF.addAll(initialiserBaseDeFait()); //remplir la base de fait en fonction de l'état de l'environnement
+		//BF.addAll(initialiserBaseDeFait()); //remplir la base de fait en fonction de l'état de l'environnement
+		BF.add(Fait.estSurVide);
+		BF.add(Fait.nonDecouvertEnHaut);
+		BF.add(Fait.nonDecouvertADroite);
+		BF.add(Fait.nonDecouvertEnBas);
+		BF.add(Fait.nonDecouvertAGauche);
+		BF.add(Fait.pasSurBordBas);
+		BF.add(Fait.pasSurBordDroite);
+		BF.add(Fait.pasSurBordGauche);
+		
 		BR.addAll(remplirBaseDeRegle());
+		
+		ArrayList<Fait> faitsElementaires = new ArrayList<Fait>();
+		faitsElementaires.add(Fait.haut);
+		faitsElementaires.add(Fait.droite);
+		faitsElementaires.add(Fait.bas);
+		faitsElementaires.add(Fait.gauche);
+		faitsElementaires.add(Fait.tirer);
+		faitsElementaires.add(Fait.sortir);
+		
+		System.out.println(BF);
+		System.out.println(BR);
+		ArrayList<Regle> reglesAsupprimer = new ArrayList<Regle>();
+		while(Collections.disjoint(BF, faitsElementaires)) {
+			for(Regle R : BR){
+				if(R.isApplicable(BF))
+				{
+					System.out.println(R.getNom() +" est applicable");
+					BF.add(R.getConclusion());
+					reglesAsupprimer.add(R);
+					if(faitsElementaires.contains(R.getConclusion()))
+						break;
+				}
+			}
+			BR.removeAll(reglesAsupprimer);
+			reglesAsupprimer.clear();
+		}
+		System.out.println(BF);
+		System.out.println(BR);
+
 
 
 	}
 
-	private static ArrayList<Regle> remplirBaseDeRegle() {
+	public static ArrayList<Regle> remplirBaseDeRegle() {
 		ArrayList<Regle> regles = new ArrayList<Regle>();
 
 		//regle principale
@@ -50,17 +89,17 @@ public class essayInference {
 		return regles;
 	}
 
-	private static ArrayList<Fait> initialiserBaseDeFait() {
+	public static ArrayList<Fait> initialiserBaseDeFait() {
 		int X = Environnement.agent.getX();
 		int Y = Environnement.agent.getY();
 
 		ArrayList<Fait> baseDeFaitsInit = new ArrayList<>();
 
 		/** fait lies a la position*/
-		if(X > 0) baseDeFaitsInit.add(Fait.pasSurBordHaut);
-		if(Y > 0) baseDeFaitsInit.add(Fait.pasSurBordGauche);
-		if(X < (Parametres.getTAILLE_GRILLE()-1) ) baseDeFaitsInit.add(Fait.pasSurBordBas);
-		if(Y < (Parametres.getTAILLE_GRILLE()-1) ) baseDeFaitsInit.add(Fait.pasSurBordDroite);
+		if(Y > 0) baseDeFaitsInit.add(Fait.pasSurBordHaut);
+		if(X > 0) baseDeFaitsInit.add(Fait.pasSurBordGauche);
+		if(Y < (Parametres.getTAILLE_GRILLE()-1) ) baseDeFaitsInit.add(Fait.pasSurBordBas);
+		if(X < (Parametres.getTAILLE_GRILLE()-1) ) baseDeFaitsInit.add(Fait.pasSurBordDroite);
 
 		/** fait lies au type des cases ou se trouve l agent*/
 		for(Elements e : Environnement.agent.getListElementObs()) {
@@ -131,7 +170,7 @@ public class essayInference {
 					break;
 				}
 			}
-			if(e.getX() == X && e.getY() == (Y-1) ) {
+			if(e.getX() == (X-1) && e.getY() == Y ) {
 				switch (e.getNom()) {
 
 				case Parametres.NOM_CACA: baseDeFaitsInit.add(Fait.cacaAGauche);
@@ -150,8 +189,8 @@ public class essayInference {
 
 		}
 
-		if(Environnement.agent.getElementObsAt(X-1, Y).isEmpty() && X>0)  baseDeFaitsInit.add( Fait.nonDecouvertADroite);
-		if(Environnement.agent.getElementObsAt(X+1, Y).isEmpty() && X<(Parametres.getTAILLE_GRILLE() -1))  baseDeFaitsInit.add( Fait.nonDecouvertAGauche);
+		if(Environnement.agent.getElementObsAt(X+1, Y).isEmpty() && X<(Parametres.getTAILLE_GRILLE() -1))  baseDeFaitsInit.add( Fait.nonDecouvertADroite);
+		if(Environnement.agent.getElementObsAt(X-1, Y).isEmpty() && X>0)  baseDeFaitsInit.add( Fait.nonDecouvertAGauche);
 		if(Environnement.agent.getElementObsAt(X, Y-1).isEmpty() && Y>0)  baseDeFaitsInit.add( Fait.nonDecouvertEnHaut);
 		if(Environnement.agent.getElementObsAt(X, Y+1).isEmpty() && Y<(Parametres.getTAILLE_GRILLE() -1))  baseDeFaitsInit.add( Fait.nonDecouvertEnBas);
 

@@ -10,7 +10,7 @@ public class Regle {
 	
 	public Regle(String nom, ArrayList<Fait> premisses, Fait conclusion) {
 		this.nom = nom;
-		this.premisses = new ArrayList<>();
+		this.premisses = new ArrayList<>(premisses);
 		this.conclusion = conclusion;
 	}
 	
@@ -31,6 +31,10 @@ public class Regle {
 	
 	public Fait getConclusion() {
 		return this.conclusion;
+	}
+	
+	public String toString(){
+		return this.getNom();
 	}
 	
 }
