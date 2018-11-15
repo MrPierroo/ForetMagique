@@ -39,5 +39,18 @@ public class Voisin extends model.Elements {
 	public ArrayList<Elements> getElementsObsVoisin() {
 		return elementsObsVoisin;
 	}
+	
+	public int getNbDanger() {
+		int[] nbdanger = new int[4];
+		for (Elements elements : elementsObsVoisin) {
+			if(elements.getNom().equals(Parametres.NOM_CACA) || elements.getNom().equals(Parametres.NOM_VENT) ) {
+				if(elements.getX() == X && elements.getY()== Y-1) nbdanger[0] = 1;
+				if(elements.getX() == X && elements.getY()== Y+1) nbdanger[1] = 1;
+				if(elements.getX() == X+1 && elements.getY()== Y) nbdanger[2] = 1;
+				if(elements.getX() == X-1 && elements.getY()== Y-1) nbdanger[3] = 1;
+			}
+		}
+		return nbdanger[0] + nbdanger[1]+nbdanger[2]+nbdanger[3];
+	}
 
 }

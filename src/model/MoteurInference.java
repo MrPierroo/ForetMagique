@@ -19,20 +19,26 @@ public class MoteurInference {
 		regles.add(new Regle("R2", new ArrayList<Fait>(){{add(Fait.NotExistCase0); add(Fait.allCaseTest0);}}, Fait.caseMin1));
 		
 		//Il existe une case 1 & case Min 1 -> on choisie une case 1 comme cible
-		regles.add(new Regle("R3", new ArrayList<Fait>(){{add(Fait.existeCase1);add(Fait.caseMin1);}}, Fait.goCible0));
+		regles.add(new Regle("R3", new ArrayList<Fait>(){{add(Fait.existeCase1);add(Fait.caseMin1);}}, Fait.goCible1));
 		
 		//Il n existe pas de case 1 & toute Case ont subi le test 1 -> case min la plus sure de niveau 2
-		regles.add(new Regle("R4", new ArrayList<Fait>(){{add(Fait.NotExisteCase1); add(Fait.allCaseTest1);}}, Fait.caseMin2));
+		regles.add(new Regle("R4", new ArrayList<Fait>(){{add(Fait.NotExisteCase1); add(Fait.caseMin1);}}, Fait.caseMin2));
+		
+		//Il existe une case non teste au test 2 && on est au test 2-> on test une case non teste
+		regles.add(new Regle("R5", new ArrayList<Fait>(){{add(Fait.existeCaseNonTest2);add(Fait.NotExisteCase2);add(Fait.caseMin2);}}, Fait.goTest2));
 		
 		//Il existe une case 2 & case Min 2 -> on choisie une case 1 comme cible
-		regles.add(new Regle("R5", new ArrayList<Fait>(){{add(Fait.existeCase2);add(Fait.caseMin2);}}, Fait.goCible0));
+		regles.add(new Regle("R6", new ArrayList<Fait>(){{add(Fait.existeCase2);add(Fait.caseMin2);}}, Fait.goCible2));
 				
+		//Il n existe pas de case 2 & toute Case ont subi le test 2 -> case min la plus sure de niveau 2
+		regles.add(new Regle("R7", new ArrayList<Fait>(){{add(Fait.NotExisteCase2); add(Fait.caseMin2);}}, Fait.goCible3));
 		
 		return regles;
 	}
 
-	public void initBaseDeFait() {
+	public static ArrayList<Fait> initBaseDeFait() {
 		ArrayList<Fait> baseDeFaitsInit = new ArrayList<>();
+		
 		//Est ce qu il y a des case sure de niveau 0 ou non
 		if(Environnement.agent.getCase0().isEmpty()) baseDeFaitsInit.add(Fait.NotExistCase0);
 		else baseDeFaitsInit.add(Fait.existeCase0);
@@ -46,10 +52,12 @@ public class MoteurInference {
 		//Est ce qu il y a des case non teste ou non
 		if(Environnement.agent.getCaseVoisinesFrontiere().isEmpty()) baseDeFaitsInit.add(Fait.allCaseTest0);
 		else baseDeFaitsInit.add(Fait.existeCaseNonTest0);
-		if(Environnement.agent.getCaseMin1().isEmpty()) baseDeFaitsInit.add(Fait.allCaseTest1);
-		else baseDeFaitsInit.add(Fait.existeCaseNonTest1);
+		if(Environnement.agent.getCaseMin3().isEmpty()) baseDeFaitsInit.add(Fait.allCaseTest3);
+		else baseDeFaitsInit.add(Fait.existeCaseNonTest3);
 		if(Environnement.agent.getCaseMin2().isEmpty()) baseDeFaitsInit.add(Fait.allCaseTest2);
 		else baseDeFaitsInit.add(Fait.existeCaseNonTest2);
+		
+		return baseDeFaitsInit;
 	}
 	/*public ArrayList<Fait> chainageAvant(ArrayList<Fait> BF, ArrayList<Regle> BR, Fait F) {
 		

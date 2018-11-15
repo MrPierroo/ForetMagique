@@ -23,7 +23,7 @@ public class Agent {
 	
 	// liste de case incertaines
 	private ArrayList<Voisin> frontiere = new ArrayList<>();// case frontiere incertaine
-	private ArrayList<Voisin> caseMin1 = new ArrayList<>();	// case comportant au moin 1 danger a proximiter
+	private ArrayList<Voisin> caseMin3 = new ArrayList<>();	// case comportant au moin 1 danger a proximiter
 	private ArrayList<Voisin> caseMin2 = new ArrayList<>();	// case comportant au moin 2 danger a proximiter
 	
 	// liste de case Certaines
@@ -58,7 +58,27 @@ public class Agent {
 	}
 	/** ============================================== Inference =============================================================================*/
 	public void chercherCible() {
+		BR = MoteurInference.initBaseRegle();
+		BF = MoteurInference.initBaseDeFait();
 		
+	}
+	
+	public void test0() {
+		Voisin v = frontiere.get(0);
+		frontiere.remove(0);
+		
+		if(v.getNbDanger() == 0) case0.add(v);
+		else if(v.getNbDanger() == 1) case1.add(v);
+		else caseMin2.add(v);
+	}
+	
+	public void test2() {
+		Voisin v = caseMin2.get(0);
+		frontiere.remove(0);
+		
+		if(v.getNbDanger() == 1){
+			//if()
+		}
 	}
 	
 	/** ============================================== Observation =============================================================================*/
@@ -355,8 +375,8 @@ public class Agent {
 		return BR;
 	}
 
-	public ArrayList<Voisin> getCaseMin1() {
-		return caseMin1;
+	public ArrayList<Voisin> getCaseMin3() {
+		return caseMin3;
 	}
 
 	public ArrayList<Voisin> getCaseMin2() {
