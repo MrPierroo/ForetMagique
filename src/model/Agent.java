@@ -155,7 +155,7 @@ public class Agent {
 		
 	}
 
-	/** ================================================ Actions ================================================================================*/
+	/** ============================================== Effecteurs ================================================================================*/
 	public void goUp(){
 		if(this.Y>0){
 			this.Y--;
@@ -194,7 +194,7 @@ public class Agent {
 	}
 
 	public void lancerCaillou() {
-		this.energieDepense+=10;
+		this.energieDepense+=Parametres.COUT_CAILLOU;
 		System.out.println("Agent : ma direction est "+direction);
 		if(direction == Environnement.agent.BAS) {
 			if(Y<Parametres.getTAILLE_GRILLE()-1) {
@@ -236,6 +236,17 @@ public class Agent {
 	public static void goTo(int x, int y) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public static void faireLesActionsBF(ArrayList<Fait> BF) {
+		for(int i = 0 ; i<BF.size() ; i++) {
+			if(Fait.haut != null) Environnement.agent.goUp();
+			if(Fait.droite != null) Environnement.agent.goRight();
+			if(Fait.gauche != null) Environnement.agent.goLeft();
+			if(Fait.bas != null) Environnement.agent.goDown();
+			if(Fait.tirer != null) Environnement.agent.lancerCaillou();
+			if(Fait.sortir != null) Environnement.agent.goSortir();
+		}
 	}
 	
 	/**=========================================== Construction base de regles ==============================================================================*/
