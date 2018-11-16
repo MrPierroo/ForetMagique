@@ -181,28 +181,6 @@ public class Environnement {
 		return false;
 	}
 
-	public static boolean cacaEn(int x, int y) {
-		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
-			int a = Environnement.ListEnvironement.get(i).getX();
-			int b = Environnement.ListEnvironement.get(i).getY();
-			if(x==a && y==b && Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_CACA) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean ventEn(int x, int y) {
-		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
-			int a = Environnement.ListEnvironement.get(i).getX();
-			int b = Environnement.ListEnvironement.get(i).getY();
-			if(x==a && y==b && Environnement.ListEnvironement.get(i).getNom() == Parametres.NOM_VENT) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	// -------------------------------------------------Supprimer un element-------------------------------------------------------------------------------
 
 	public static void removeMonstre(int x, int y) {

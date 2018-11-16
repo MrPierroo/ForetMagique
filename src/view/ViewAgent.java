@@ -188,16 +188,8 @@ public class ViewAgent{
 		}
 		
 		for (Voisin v : Environnement.agent.getCaseVoisines()) {
-			int score = v.getScoreDanger();
 			g.setColor(Color.darkGray);
 			g.fillRect(CO(v.getX()), CO(v.getY()),T,T);
-				
-			g.setColor(Color.CYAN);
-			if(score > 0) g.setColor(Color.ORANGE);
-			if(score == 10 || score == 9) g.setColor(Color.RED);
-			if(score == 0) g.setColor(Color.GREEN);
-			g.setFont(new Font("Tahoma",Font.BOLD, intervalle/3));
-			g.drawString(v.getScoreDanger()+"", CO(v.getX())+intervalle/4, CO(v.getY())+intervalle/2);
 		}
 
 		

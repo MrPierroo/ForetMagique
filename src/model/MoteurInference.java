@@ -2,8 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-import elements.Voisin;
-
 public class MoteurInference {
 
 	private ArrayList<Fait> BaseFait;
