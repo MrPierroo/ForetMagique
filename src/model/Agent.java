@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Game.GameRun;
 import elements.Vide;
 import elements.Voisin;
+import model.Fait;
 
 public class Agent {
 
@@ -20,12 +21,12 @@ public class Agent {
 	private ArrayList<Elements> listElementObs = new ArrayList<Elements>();
 	private ArrayList<Fait> BF = new ArrayList<Fait>();
 	private ArrayList<Regle> BR = MoteurInference.initBaseRegle();
-	
+
 	// liste de case incertaines
 	private ArrayList<Voisin> frontiere = new ArrayList<>();// case frontiere incertaine
 	private ArrayList<Voisin> caseMin3 = new ArrayList<>();	// case comportant au moin 1 danger a proximiter
 	private ArrayList<Voisin> caseMin2 = new ArrayList<>();	// case comportant au moin 2 danger a proximiter
-	
+
 	// liste de case Certaines
 	private ArrayList<Voisin> case0 = new ArrayList<>();	// case comportant 0 danger a proximiter donc sure
 	private ArrayList<Voisin> case1 = new ArrayList<>();	// case comportant 1 danger a proximiter
@@ -34,7 +35,7 @@ public class Agent {
 	private ArrayList<Voisin> case4 = new ArrayList<>();	// case comportant 4 danger a proximiter
 	private ArrayList<Voisin> caseMonstre = new ArrayList<>();	// case monstre certain
 	private ArrayList<Voisin> caseGouffre = new ArrayList<>();	// case gouffre certain
-	
+
 	private int lastAction;
 	private int direction = BAS;
 	private int energieDepense = 0;
@@ -55,44 +56,85 @@ public class Agent {
 	}
 
 	public void doCycle() {
-
+		//observer();
+		chercherCible();
 	}
 	/** ============================================== Inference =============================================================================*/
 	public void chercherCible() {
 		boolean cibleTrouve = false;
+		observerVoisin();
+		caseMin2.clear(); ; caseMin3.clear();
+		case0.clear(); case1.clear(); case2.clear(); case3.clear(); case4.clear();
+		caseMonstre.clear(); caseGouffre.clear();
 		while(!cibleTrouve) {
 			BF = MoteurInference.initBaseDeFait();
-			
+			ArrayList<Fait> but = MoteurInference.moteurInference(BF, BR, MoteurInference.getBut());
+
+			if(!but.isEmpty()) {
+				Voisin cible = null;
+				switch (but.get(0)) {
+				case goTest0: test0();
+				break;
+
+				case goCible0 :
+					cibleTrouve = true;
+					cible = case0.get(0);
+					System.out.println("Go en :  X="+(cible.getX()+1)+"  Y="+(cible.getY()+1));
+					break;
+				case goCible1 :
+					cibleTrouve = true;
+					cible = case1.get(0);
+					System.out.println("Go en :  X="+(cible.getX()+1)+"  Y="+(cible.getY()+1));
+					break;
+				case goCible2 :
+					cibleTrouve = true;
+					cible = case2.get(0);
+					System.out.println("Go en :  X="+(cible.getX()+1)+"  Y="+(cible.getY()+1));
+					break;
+				case goCible3 :
+					cibleTrouve = true;
+					cible = case3.get(0);
+					System.out.println("Go en :  X="+(cible.getX()+1)+"  Y="+(cible.getY()+1));
+					break;
+				default:
+					System.out.println(but.toString());
+					cibleTrouve = true;
+					break;
+				}
+			}else {
+				cibleTrouve = true;
+				System.out.println("Pas de solution trouvée");
+			}
 		}
 	}
-	
+
 	public void test0() {
 		Voisin v = frontiere.get(0);
 		frontiere.remove(0);
-		
+
 		if(v.getNbDanger() == 0) case0.add(v);
 		else if(v.getNbDanger() == 1) case1.add(v);
 		else if(v.getNbDanger() == 2) case2.add(v);
 		else if(v.getNbDanger() == 3) case3.add(v);
 		else if(v.getNbDanger() == 4) case4.add(v);
 	}
-	
+
 	/*public void test2() {
 		Voisin v = caseMin2.get(0);
 		frontiere.remove(0);
-		
+
 		if(v.getNbDanger() == 1){
 			//if()
 		}
 	}*/
-	
+
 	/** ============================================== Observation =============================================================================*/
-	
+
 	public void observer() {
 		ajouterVisionAgent();
 		observerVoisin();
 	}
-	
+
 	public void observerVoisin() {
 		int X = this.X; int Y = this.Y;
 		if(X-1>=0) {
@@ -111,7 +153,7 @@ public class Agent {
 	}
 
 	public void ajouterVisionAgent() {
-	    boolean elementAjoute = false;
+		boolean elementAjoute = false;
 		int x = this.getX();
 		int y = this.getY();
 		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
@@ -128,7 +170,7 @@ public class Agent {
 		}
 
 	}
-	
+
 	public boolean elementNonObserve(Elements e) {
 		int x = e.getX();
 		int y = e.getY();
@@ -141,21 +183,21 @@ public class Agent {
 		}
 		return true;
 	}
-	
+
 	public boolean isVoisinObs(int x, int y) {
 		for (Voisin v : frontiere) {
 			if(v.getX() == x && v.getY() == y) return true;
 		}
 		return false;
 	}
-	
+
 	public boolean isElementObs(int x, int y) {
 		for (Elements e : listElementObs) {
 			if(e.getX() == x && e.getY() == y) return true;
 		}
 		return false;
 	}
-	
+
 	public void deleteVoisin(int x, int y) {
 		int position = -1;
 		for (int i = 0; i < frontiere.size(); i++) {
@@ -164,11 +206,11 @@ public class Agent {
 		}
 		if(position>-1) frontiere.remove(position);	
 	}
-	
+
 	/** utilise dans nouvelle version*/
 	public ArrayList<Elements> getElementObsAt(int x, int y){
 		ArrayList<Elements> listElement = new ArrayList<>();
-		
+
 		for (Elements elements : listElementObs) {
 			if(elements.getX() == x && elements.getY() == y) listElement.add(elements);
 		}
@@ -176,9 +218,9 @@ public class Agent {
 	}
 
 	/** ============================================ Mise ajour Etat ===========================================================================*/
-	
+
 	public void calculScore() {
-		
+
 	}
 
 	/** ================================================ Actions ================================================================================*/
@@ -188,7 +230,7 @@ public class Agent {
 			this.energieDepense++;
 			this.lastAction = HAUT;
 			this.setDirection(HAUT);
-			
+
 		}
 	}
 
@@ -257,48 +299,12 @@ public class Agent {
 		this.energieDepense++;
 		this.lastAction = SORTIR;
 	}
-	
+
 	// Atteindre une position depuis la position actuelle en ne passant que par des cases observees
 	public static void goTo(int x, int y) {
 		// TODO Auto-generated method stub
-		
-	}
-	
-	/**=========================================== Construction base de regles ==============================================================================*/
-	
-	public static ArrayList<Regle> construireBR() {
-		
-		ArrayList<Regle> regles = null;
-		
-		
-		
-		//regles.add(new Regle("V0",ventObserve, ventPresent));
-		//regles.add(new Regle("C0",cacaObserve, cacaPresent));
-		
-		
-		return regles;
-		
-	}
-	
-	/*public static ArrayList<Fait> construireBF() {
-		
-		ArrayList<Fait> baseDeFaits = null;
-		
-		for(int x = 0 ; x<Parametres.getTAILLE_GRILLE() ; x++) {
-			for(int y = 0 ; y<Parametres.getTAILLE_GRILLE() ; y++) {
-				baseDeFaits.add(new Fait("ventObserve",false,x,y));
-				baseDeFaits.add(new Fait("cacaObserve",false,x,y));
-				baseDeFaits.add(new Fait("videObserve",false,x,y));
-				baseDeFaits.add(new Fait("portailObserve",false,x,y));
-				baseDeFaits.add(new Fait("monstreEn",false,x,y));
-				baseDeFaits.add(new Fait("crevasseEn",false,x,y));
-			}
-		}
-		
-		return baseDeFaits;
-	}*/
-	
 
+	}
 
 	/**=============================================== Reinitialisation ==============================================================================*/
 	public void reinitialiserAgent() {
@@ -359,11 +365,11 @@ public class Agent {
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
-	
+
 	public int[] getCaseViseeAvecCaillou() {
 		return caseViseeAvecCaillou ;
 	}
-	
+
 	public void setCaseViseeAvecCaillou(int [] CaseViseeAvecCaillou) {
 		this.caseViseeAvecCaillou = CaseViseeAvecCaillou;
 	}
@@ -371,7 +377,7 @@ public class Agent {
 	public ArrayList<Voisin> getCaseVoisinesFrontiere() {
 		return frontiere;
 	}
-	
+
 	public ArrayList<Fait> getBaseDeFaits() {
 		return BF;
 	}

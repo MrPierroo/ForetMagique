@@ -63,6 +63,44 @@ public class MoteurInference {
 		
 		return baseDeFaitsInit;
 	}
+	
+public static ArrayList<Fait> moteurInference(ArrayList<Fait> BF, ArrayList<Regle> BR, ArrayList<Fait> buts){
+		
+		ArrayList<Regle> reglesAsupprimer = new ArrayList<Regle>();
+		boolean isAnyRuleApplicable = true;
+		while(isAnyRuleApplicable) {
+			isAnyRuleApplicable = false;
+			for(Regle R : BR){
+				if(R.isApplicable(BF))
+				{
+					isAnyRuleApplicable = true;
+					BF.add(R.getConclusion());
+					reglesAsupprimer.add(R);
+					if(buts.contains(R.getConclusion()))
+						break;
+				}
+
+			}
+			BR.removeAll(reglesAsupprimer);
+			reglesAsupprimer.clear();
+		}
+		
+		ArrayList<Fait> mouvements = new ArrayList<Fait>(BF);
+		mouvements.retainAll(buts);
+		return mouvements;
+	}
+	
+public static ArrayList<Fait> getBut(){
+	ArrayList<Fait> buts = new ArrayList<>();
+	buts.add(Fait.goCible0);
+	buts.add(Fait.goCible1);
+	buts.add(Fait.goCible3);
+	buts.add(Fait.goCible3);
+	buts.add(Fait.goTest0);
+	buts.add(Fait.goTest2);
+	buts.add(Fait.goTest3);
+	return buts;
+}
 	/*public ArrayList<Fait> chainageAvant(ArrayList<Fait> BF, ArrayList<Regle> BR, Fait F) {
 		
 		boolean regleApplicable = true;
@@ -87,12 +125,12 @@ public class MoteurInference {
 		
 		return BF;
 		
-	}
+	}*/
 	
 	
 
 	// Verifier qu'au moins une regle est applicable
-	private boolean isRegleApplicable(ArrayList<Regle> BR, ArrayList<Fait> BF) {
+	/*private boolean isRegleApplicable(ArrayList<Regle> BR, ArrayList<Fait> BF) {
 		for(int i = 0 ; i<BR.size() ; i++) {
 			for(int j = 0 ; j<BF.size() ; j++) {
 				if(BR.get(i).getPremisse() == BF.get(j)) {
@@ -101,10 +139,10 @@ public class MoteurInference {
 			}
 		}
 		return false;
-	}
+	}*/
 
 	// Choisir une regle a analyser suivant heuristique ou autre... => pour l'instant c'est la premiere qui vient
-	private Regle choisirUneRegle(ArrayList<Regle> BR, ArrayList<Fait> BF) {
+	/*private Regle choisirUneRegle(ArrayList<Regle> BR, ArrayList<Fait> BF) {
 		for(int i = 0 ; i<BR.size() ; i++) {
 			for(int j = 0 ; j<BF.size() ; j++) {
 				if(BR.get(i).getPremisse() == BF.get(j)) {
@@ -123,6 +161,6 @@ public class MoteurInference {
 			}
 		}
 	}
-
 */
+
 }
