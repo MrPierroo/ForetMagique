@@ -8,16 +8,16 @@ public class MoteurInference {
 
 	private ArrayList<Fait> BaseFait;
 	private ArrayList<Regle> BaseRegle;
-	
+
 	public MoteurInference() {
 		BaseFait = new ArrayList<>();
 		BaseRegle = new ArrayList<>();
 		initBaseRegle();
 		initBaseDeFait();
 	}
-	
-public String chainageAvant(ArrayList<Fait> buts){
-		
+
+	public ArrayList<Fait> chainageAvant(ArrayList<Fait> buts){
+
 		ArrayList<Regle> reglesAsupprimer = new ArrayList<Regle>();
 		boolean isAnyRuleApplicable = true;
 		while(isAnyRuleApplicable) {
@@ -36,12 +36,12 @@ public String chainageAvant(ArrayList<Fait> buts){
 			BaseRegle.removeAll(reglesAsupprimer);
 			reglesAsupprimer.clear();
 		}
-		
+
 		ArrayList<Fait> mouvements = new ArrayList<Fait>(BaseFait);
 		mouvements.retainAll(buts);
-		return mouvements.toString();
+		return mouvements;
 	}
-	
+
 	public void  initBaseRegle() {
 		BaseRegle.clear();
 		BaseRegle.add(new Regle("R0", new ArrayList<Fait>(){{add(Fait.estSurPortail);}}, Fait.sortir));
@@ -77,12 +77,12 @@ public String chainageAvant(ArrayList<Fait> buts){
 		BaseRegle.add(new Regle("R18", new ArrayList<Fait>(){{add(Fait.cacaAGauche);}}, Fait.dangerGauche));
 		BaseRegle.add(new Regle("R19", new ArrayList<Fait>(){{add(Fait.cacaEnBas);}}, Fait.dangerBas));
 		BaseRegle.add(new Regle("R20", new ArrayList<Fait>(){{add(Fait.cacaEnHaut);}}, Fait.dangerHaut));
-		
+
 		BaseRegle.add(new Regle("R21", new ArrayList<Fait>(){{add(Fait.ventADroite);}}, Fait.dangerDroite));
 		BaseRegle.add(new Regle("R22", new ArrayList<Fait>(){{add(Fait.ventAGauche);}}, Fait.dangerGauche));
 		BaseRegle.add(new Regle("R23", new ArrayList<Fait>(){{add(Fait.ventEnBas);}}, Fait.dangerBas));
 		BaseRegle.add(new Regle("R24", new ArrayList<Fait>(){{add(Fait.ventEnHaut);}}, Fait.dangerHaut));
-	
+
 		//héro entouré par deux dangers
 		BaseRegle.add(new Regle("R25", new ArrayList<Fait>(){{add(Fait.dangerHaut); add(Fait.dangerDroite);}}, Fait.doubleDanger));
 		BaseRegle.add(new Regle("R26", new ArrayList<Fait>(){{add(Fait.dangerDroite); add(Fait.dangerBas);}}, Fait.doubleDanger));
@@ -93,8 +93,8 @@ public String chainageAvant(ArrayList<Fait> buts){
 		BaseRegle.add(new Regle("R30", new ArrayList<Fait>(){{add(Fait.doubleDanger); add(Fait.videADroite);}}, Fait.decisionAllerDroite));
 		BaseRegle.add(new Regle("R31", new ArrayList<Fait>(){{add(Fait.doubleDanger); add(Fait.videEnBas);}}, Fait.decisionAllerBas));
 		BaseRegle.add(new Regle("R32", new ArrayList<Fait>(){{add(Fait.doubleDanger); add(Fait.videEnHaut);}}, Fait.decisionAllerHaut));
-		
-		
+
+
 	}
 
 	public void initBaseDeFait() {
@@ -137,7 +137,7 @@ public String chainageAvant(ArrayList<Fait> buts){
 
 				case Parametres.NOM_VENT: BaseFait.add(Fait.ventEnHaut);
 				break;
-				
+
 				case Parametres.NOM_VIDE: BaseFait.add(Fait.videEnHaut);
 				break;
 
@@ -153,7 +153,7 @@ public String chainageAvant(ArrayList<Fait> buts){
 
 				case Parametres.NOM_VENT: BaseFait.add(Fait.ventEnBas);
 				break;
-				
+
 				case Parametres.NOM_VIDE: BaseFait.add(Fait.videEnBas);
 				break;
 
@@ -169,7 +169,7 @@ public String chainageAvant(ArrayList<Fait> buts){
 
 				case Parametres.NOM_VENT: BaseFait.add(Fait.ventADroite);
 				break;
-				
+
 				case Parametres.NOM_VIDE: BaseFait.add(Fait.videADroite);
 				break;
 
@@ -185,7 +185,7 @@ public String chainageAvant(ArrayList<Fait> buts){
 
 				case Parametres.NOM_VENT: BaseFait.add(Fait.ventAGauche);
 				break;
-				
+
 				case Parametres.NOM_VIDE: BaseFait.add(Fait.videAGauche);
 				break;
 

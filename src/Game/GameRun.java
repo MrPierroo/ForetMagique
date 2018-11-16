@@ -53,10 +53,10 @@ public class GameRun implements Runnable{
 				
 				moteurinference = new MoteurInference();
 				
-				System.out.println(moteurinference.chainageAvant(buts));
+				Environnement.agent.getMouvements().clear();
+				Environnement.agent.getMouvements().addAll(moteurinference.chainageAvant(buts));
 			
-				
-				//Environnement.agent.faireLesActionsBF(BF);
+				System.out.println(moteurinference.chainageAvant(buts).toString());
 				
 				drawingEnvironnement.render();
 				drawControls.render();

@@ -21,6 +21,8 @@ public class Agent {
 	private ArrayList<Fait> BF = new ArrayList<Fait>();
 	private ArrayList<Regle> BR = new ArrayList<Regle>();
 	private ArrayList<Voisin> caseVoisines = new ArrayList<>();
+	private ArrayList<Fait> mouvements = new ArrayList<Fait>();
+
 	private int lastAction;
 	private int direction = BAS;
 	private int energieDepense = 0;
@@ -41,16 +43,44 @@ public class Agent {
 	}
 
 	public void doCycle() {
+		if(!mouvements.isEmpty()){
+			Fait fait = mouvements.get(0);
+			if(fait.equals(Fait.haut)) Environnement.agent.goUp();
+			if(fait.equals(Fait.droite)) Environnement.agent.goRight();
+			if(fait.equals(Fait.gauche)) Environnement.agent.goLeft();
+			if(fait.equals(Fait.bas)) Environnement.agent.goDown();
+			if(fait.equals(Fait.tirer)) Environnement.agent.lancerCaillou();
+			if(fait.equals(Fait.sortir)) Environnement.agent.goSortir();
+			Environnement.newCycle = true;
+		}
+		else{
+			int rand = (int) (Math.random()*4);
+			switch(rand){
+			case 0:
+				Environnement.agent.goUp();
+				break;
+			case 1:
+				Environnement.agent.goRight();
+				break;
+			case 2:
+				Environnement.agent.goDown();
+				break;
+			default:
+				Environnement.agent.goLeft();
+				break;
+			}
+			Environnement.newCycle = true;
+		}
 
 	}
-	
+
 	/** ============================================== Observation =============================================================================*/
-	
+
 	public void observer() {
 		ajouterVisionAgent();
 		observerVoisin();
 	}
-	
+
 	public void observerVoisin() {
 		int X = this.X; int Y = this.Y;
 		if(X-1>=0) {
@@ -69,7 +99,7 @@ public class Agent {
 	}
 
 	public void ajouterVisionAgent() {
-	    boolean elementAjoute = false;
+		boolean elementAjoute = false;
 		int x = this.getX();
 		int y = this.getY();
 		for (int i = 0; i < Environnement.ListEnvironement.size(); i++) {
@@ -86,7 +116,7 @@ public class Agent {
 		}
 
 	}
-	
+
 	public boolean elementNonObserve(Elements e) {
 		int x = e.getX();
 		int y = e.getY();
@@ -99,7 +129,7 @@ public class Agent {
 		}
 		return true;
 	}
-	
+
 	public boolean videEn(int x, int y) {
 		for(int i = 0 ; i<listElementObs.size() ; i++) {
 			int a = listElementObs.get(i).getX();
@@ -112,24 +142,24 @@ public class Agent {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	public boolean isVoisinObs(int x, int y) {
 		for (Voisin v : caseVoisines) {
 			if(v.getX() == x && v.getY() == y) return true;
 		}
 		return false;
 	}
-	
+
 	public boolean isElementObs(int x, int y) {
 		for (Elements e : listElementObs) {
 			if(e.getX() == x && e.getY() == y) return true;
 		}
 		return false;
 	}
-	
+
 	public void deleteVoisin(int x, int y) {
 		int position = -1;
 		for (int i = 0; i < caseVoisines.size(); i++) {
@@ -138,11 +168,11 @@ public class Agent {
 		}
 		if(position>-1) caseVoisines.remove(position);	
 	}
-	
+
 	/** utilise dans nouvelle version*/
 	public ArrayList<Elements> getElementObsAt(int x, int y){
 		ArrayList<Elements> listElement = new ArrayList<>();
-		
+
 		for (Elements elements : listElementObs) {
 			if(elements.getX() == x && elements.getY() == y) listElement.add(elements);
 		}
@@ -150,9 +180,9 @@ public class Agent {
 	}
 
 	/** ============================================ Mise ajour Etat ===========================================================================*/
-	
+
 	public void calculScore() {
-		
+
 	}
 
 	/** ============================================== Effecteurs ================================================================================*/
@@ -162,7 +192,7 @@ public class Agent {
 			this.energieDepense++;
 			this.lastAction = HAUT;
 			this.setDirection(HAUT);
-			
+
 		}
 	}
 
@@ -231,13 +261,13 @@ public class Agent {
 		this.energieDepense++;
 		this.lastAction = SORTIR;
 	}
-	
+
 	// Atteindre une position depuis la position actuelle en ne passant que par des cases observees
 	public static void goTo(int x, int y) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public static void faireLesActionsBF(ArrayList<Fait> BF) {
 		for(int i = 0 ; i<BF.size() ; i++) {
 			if(Fait.haut != null) Environnement.agent.goUp();
@@ -248,27 +278,27 @@ public class Agent {
 			if(Fait.sortir != null) Environnement.agent.goSortir();
 		}
 	}
-	
+
 	/**=========================================== Construction base de regles ==============================================================================*/
-	
+
 	public static ArrayList<Regle> construireBR() {
-		
+
 		ArrayList<Regle> regles = null;
-		
-		
-		
+
+
+
 		//regles.add(new Regle("V0",ventObserve, ventPresent));
 		//regles.add(new Regle("C0",cacaObserve, cacaPresent));
-		
-		
+
+
 		return regles;
-		
+
 	}
-	
+
 	/*public static ArrayList<Fait> construireBF() {
-		
+
 		ArrayList<Fait> baseDeFaits = null;
-		
+
 		for(int x = 0 ; x<Parametres.getTAILLE_GRILLE() ; x++) {
 			for(int y = 0 ; y<Parametres.getTAILLE_GRILLE() ; y++) {
 				baseDeFaits.add(new Fait("ventObserve",false,x,y));
@@ -279,10 +309,10 @@ public class Agent {
 				baseDeFaits.add(new Fait("crevasseEn",false,x,y));
 			}
 		}
-		
+
 		return baseDeFaits;
 	}*/
-	
+
 
 
 	/**=============================================== Reinitialisation ==============================================================================*/
@@ -344,11 +374,11 @@ public class Agent {
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
-	
+
 	public int[] getCaseViseeAvecCaillou() {
 		return caseViseeAvecCaillou ;
 	}
-	
+
 	public void setCaseViseeAvecCaillou(int [] CaseViseeAvecCaillou) {
 		this.caseViseeAvecCaillou = CaseViseeAvecCaillou;
 	}
@@ -356,13 +386,21 @@ public class Agent {
 	public ArrayList<Voisin> getCaseVoisines() {
 		return caseVoisines;
 	}
-	
+
 	public ArrayList<Fait> getBaseDeFaits() {
 		return BF;
 	}
 
 	public ArrayList<Regle> getBaseDeRegles() {
 		return BR;
+	}
+
+	public ArrayList<Fait> getMouvements() {
+		return mouvements;
+	}
+
+	public void setMouvements(ArrayList<Fait> mouvements) {
+		this.mouvements = mouvements;
 	}
 
 
