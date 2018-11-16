@@ -29,8 +29,7 @@ public class GameRun implements Runnable{
 		drawingAgent.render();
 		System.out.println("Initialisation effectuee ! ");
 		
-		ArrayList<Fait> BF = new ArrayList<Fait>();
-		ArrayList<Regle> BR = new ArrayList<Regle>();
+		MoteurInference moteurinference = new MoteurInference();
 		ArrayList<Fait> buts = new ArrayList<Fait>();
 		buts.add(Fait.haut);
 		buts.add(Fait.droite);
@@ -50,13 +49,10 @@ public class GameRun implements Runnable{
 				
 				System.out.println(Environnement.agent.getListElementObs());
 				
-				BF.clear();
-				BR.clear();
-				BF.addAll(essayInference.initialiserBaseDeFait());
-				BR.addAll(essayInference.remplirBaseDeRegle());
+				moteurinference = new MoteurInference();
 				
-			//	System.out.println(BF);
-				System.out.println(essayInference.moteurInference(BF, BR, buts));
+				System.out.println(moteurinference.chainageAvant(buts));
+			
 				
 				drawingEnvironnement.render();
 				drawingAgent.render();

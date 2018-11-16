@@ -34,5 +34,10 @@ public enum Fait {
 	decisionAllerDroite,
 	decisionAllerGauche,
 	decisionAllerBas,
-	decisionAllerHaut
+	decisionAllerHaut,
+	dangerHaut,
+	dangerDroite,
+	dangerBas,
+	dangerGauche,
+	doubleDanger
 }

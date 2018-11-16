@@ -13,12 +13,37 @@ public class MoteurInference {
 		BaseFait = new ArrayList<>();
 		BaseRegle = new ArrayList<>();
 		initBaseRegle();
-		initBaseRegle();
+		initBaseDeFait();
+	}
+	
+public String chainageAvant(ArrayList<Fait> buts){
+		
+		ArrayList<Regle> reglesAsupprimer = new ArrayList<Regle>();
+		boolean isAnyRuleApplicable = true;
+		while(isAnyRuleApplicable) {
+			isAnyRuleApplicable = false;
+			for(Regle R : BaseRegle){
+				if(R.isApplicable(BaseFait))
+				{
+					isAnyRuleApplicable = true;
+					BaseFait.add(R.getConclusion());
+					reglesAsupprimer.add(R);
+					if(buts.contains(R.getConclusion()))
+						break;
+				}
+
+			}
+			BaseRegle.removeAll(reglesAsupprimer);
+			reglesAsupprimer.clear();
+		}
+		
+		ArrayList<Fait> mouvements = new ArrayList<Fait>(BaseFait);
+		mouvements.retainAll(buts);
+		return mouvements.toString();
 	}
 	
 	public void  initBaseRegle() {
-
-		//regle principale
+		BaseRegle.clear();
 		BaseRegle.add(new Regle("R0", new ArrayList<Fait>(){{add(Fait.estSurPortail);}}, Fait.sortir));
 
 		//regles de mouvements
@@ -46,6 +71,30 @@ public class MoteurInference {
 		BaseRegle.add(new Regle("R14", new ArrayList<Fait>(){{add(Fait.estSurVide); add(Fait.nonDecouvertAGauche);}}, Fait.decisionAllerGauche));
 		BaseRegle.add(new Regle("R15", new ArrayList<Fait>(){{add(Fait.estSurCaca); add(Fait.videAGauche);}}, Fait.decisionAllerGauche));
 		BaseRegle.add(new Regle("R16", new ArrayList<Fait>(){{add(Fait.estSurVent); add(Fait.videAGauche);}}, Fait.decisionAllerGauche));
+
+		//REgles concernant un danger général
+		BaseRegle.add(new Regle("R17", new ArrayList<Fait>(){{add(Fait.cacaADroite);}}, Fait.dangerDroite));
+		BaseRegle.add(new Regle("R18", new ArrayList<Fait>(){{add(Fait.cacaAGauche);}}, Fait.dangerGauche));
+		BaseRegle.add(new Regle("R19", new ArrayList<Fait>(){{add(Fait.cacaEnBas);}}, Fait.dangerBas));
+		BaseRegle.add(new Regle("R20", new ArrayList<Fait>(){{add(Fait.cacaEnHaut);}}, Fait.dangerHaut));
+		
+		BaseRegle.add(new Regle("R21", new ArrayList<Fait>(){{add(Fait.ventADroite);}}, Fait.dangerDroite));
+		BaseRegle.add(new Regle("R22", new ArrayList<Fait>(){{add(Fait.ventAGauche);}}, Fait.dangerGauche));
+		BaseRegle.add(new Regle("R23", new ArrayList<Fait>(){{add(Fait.ventEnBas);}}, Fait.dangerBas));
+		BaseRegle.add(new Regle("R24", new ArrayList<Fait>(){{add(Fait.ventEnHaut);}}, Fait.dangerHaut));
+	
+		//héro entouré par deux dangers
+		BaseRegle.add(new Regle("R25", new ArrayList<Fait>(){{add(Fait.dangerHaut); add(Fait.dangerDroite);}}, Fait.doubleDanger));
+		BaseRegle.add(new Regle("R26", new ArrayList<Fait>(){{add(Fait.dangerDroite); add(Fait.dangerBas);}}, Fait.doubleDanger));
+		BaseRegle.add(new Regle("R27", new ArrayList<Fait>(){{add(Fait.dangerBas); add(Fait.dangerGauche);}}, Fait.doubleDanger));
+		BaseRegle.add(new Regle("R28", new ArrayList<Fait>(){{add(Fait.dangerGauche); add(Fait.dangerHaut);}}, Fait.doubleDanger));
+
+		BaseRegle.add(new Regle("R29", new ArrayList<Fait>(){{add(Fait.doubleDanger); add(Fait.videAGauche);}}, Fait.decisionAllerGauche));
+		BaseRegle.add(new Regle("R30", new ArrayList<Fait>(){{add(Fait.doubleDanger); add(Fait.videADroite);}}, Fait.decisionAllerDroite));
+		BaseRegle.add(new Regle("R31", new ArrayList<Fait>(){{add(Fait.doubleDanger); add(Fait.videEnBas);}}, Fait.decisionAllerBas));
+		BaseRegle.add(new Regle("R32", new ArrayList<Fait>(){{add(Fait.doubleDanger); add(Fait.videEnHaut);}}, Fait.decisionAllerHaut));
+		
+		
 	}
 
 	public void initBaseDeFait() {
@@ -54,10 +103,10 @@ public class MoteurInference {
 		int Y = Environnement.agent.getY();
 
 		/** fait lies a la position*/
-		if(X > 0) BaseFait.add(Fait.pasSurBordHaut);
-		if(Y > 0) BaseFait.add(Fait.pasSurBordGauche);
-		if(X < (Parametres.getTAILLE_GRILLE()-1) ) BaseFait.add(Fait.pasSurBordBas);
-		if(Y < (Parametres.getTAILLE_GRILLE()-1) ) BaseFait.add(Fait.pasSurBordDroite);
+		if(Y > 0) BaseFait.add(Fait.pasSurBordHaut);
+		if(X > 0) BaseFait.add(Fait.pasSurBordGauche);
+		if(Y < (Parametres.getTAILLE_GRILLE()-1) ) BaseFait.add(Fait.pasSurBordBas);
+		if(X < (Parametres.getTAILLE_GRILLE()-1) ) BaseFait.add(Fait.pasSurBordDroite);
 
 		/** fait lies au type des cases ou se trouve l agent*/
 		for(Elements e : Environnement.agent.getListElementObs()) {
@@ -128,7 +177,7 @@ public class MoteurInference {
 					break;
 				}
 			}
-			if(e.getX() == X && e.getY() == (Y-1) ) {
+			if(e.getX() == (X-1) && e.getY() == Y ) {
 				switch (e.getNom()) {
 
 				case Parametres.NOM_CACA: BaseFait.add(Fait.cacaAGauche);
@@ -147,71 +196,10 @@ public class MoteurInference {
 
 		}
 
-		if(Environnement.agent.getElementObsAt(X-1, Y).isEmpty() && X>0)  BaseFait.add( Fait.nonDecouvertADroite);
-		if(Environnement.agent.getElementObsAt(X+1, Y).isEmpty() && X<(Parametres.getTAILLE_GRILLE() -1))  BaseFait.add( Fait.nonDecouvertAGauche);
+		if(Environnement.agent.getElementObsAt(X+1, Y).isEmpty() && X<(Parametres.getTAILLE_GRILLE() -1))  BaseFait.add( Fait.nonDecouvertADroite);
+		if(Environnement.agent.getElementObsAt(X-1, Y).isEmpty() && X>0)  BaseFait.add( Fait.nonDecouvertAGauche);
 		if(Environnement.agent.getElementObsAt(X, Y-1).isEmpty() && Y>0)  BaseFait.add( Fait.nonDecouvertEnHaut);
 		if(Environnement.agent.getElementObsAt(X, Y+1).isEmpty() && Y<(Parametres.getTAILLE_GRILLE() -1))  BaseFait.add( Fait.nonDecouvertEnBas);
-	}
-	/*public ArrayList<Fait> chainageAvant(ArrayList<Fait> BF, ArrayList<Regle> BR, Fait F) {
-		
-		boolean regleApplicable = true;
-		
-		while(!BF.contains(F) && regleApplicable) {
-			if(isRegleApplicable(BR, BF)) {
-				Regle regle = choisirUneRegle(BR, BF);
-				remove(regle, BR);
-				BF.add(regle.getPredicat());
-			}
-			else regleApplicable = false;
-		}
-		if(BF.contains(F)) {
-			// En gros notre fait a verifier serait portailVisible == true, donc on irait au portail dans cette condition
-			int x = F.getX();
-			int y = F.getY();
-			Agent.goTo(x,y);
-		}
-		else {
-			//TODO sinon il faut dire ce que l'on fait, ou est ce qu'on explore
-		}
-		
-		return BF;
-		
-	}
-	
-	
 
-	// Verifier qu'au moins une regle est applicable
-	private boolean isRegleApplicable(ArrayList<Regle> BR, ArrayList<Fait> BF) {
-		for(int i = 0 ; i<BR.size() ; i++) {
-			for(int j = 0 ; j<BF.size() ; j++) {
-				if(BR.get(i).getPremisse() == BF.get(j)) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
-
-	// Choisir une regle a analyser suivant heuristique ou autre... => pour l'instant c'est la premiere qui vient
-	private Regle choisirUneRegle(ArrayList<Regle> BR, ArrayList<Fait> BF) {
-		for(int i = 0 ; i<BR.size() ; i++) {
-			for(int j = 0 ; j<BF.size() ; j++) {
-				if(BR.get(i).getPremisse() == BF.get(j)) {
-					return BR.get(i);
-				}
-			}
-		}
-		return null;
-	}
-	
-	// Enlever la regle choisie de BR
-	private void remove(Regle regle, ArrayList<Regle> BR) {
-		for(int i = 0 ; i<BR.size() ; i++) {
-			if(BR.get(i) == regle) {
-				BR.remove(i);
-			}
-		}
-	}
-
-*/
 }
