@@ -7,12 +7,13 @@ import java.util.Collections;
 import org.omg.Messaging.SyncScopeHelper;
 
 public class essayInference {
+	
 	public static void main(String[] args) {
 		ArrayList<Fait> BF = new ArrayList<Fait>();
 		ArrayList<Regle> BR = new ArrayList<Regle>();
 
 		//constitution de la base de fait:
-		BF.addAll(initialiserBaseDeFait()); //remplir la base de fait en fonction de l'état de l'environnement		
+		BF.addAll(initialiserBaseDeFait()); //remplir la base de fait en fonction de l'ï¿½tat de l'environnement		
 		BR.addAll(remplirBaseDeRegle());
 		
 		ArrayList<Fait> faitsElementaires = new ArrayList<Fait>();
@@ -46,8 +47,6 @@ public class essayInference {
 		}
 		System.out.println(BF);
 		System.out.println(BR);
-
-
 
 	}
 	
@@ -89,22 +88,22 @@ public class essayInference {
 		regles.add(new Regle("R3", new ArrayList<Fait>(){{add(Fait.decisionAllerBas); add(Fait.pasSurBordBas);}}, Fait.bas));
 		regles.add(new Regle("R4", new ArrayList<Fait>(){{add(Fait.decisionAllerGauche); add(Fait.pasSurBordGauche);}}, Fait.gauche));
 
-		//regles impliquant un déplacement en haut
+		//regles impliquant un dï¿½placement en haut
 		regles.add(new Regle("R5", new ArrayList<Fait>(){{add(Fait.estSurVide); add(Fait.nonDecouvertEnHaut);}}, Fait.decisionAllerHaut));
 		regles.add(new Regle("R6", new ArrayList<Fait>(){{add(Fait.estSurCaca); add(Fait.videEnHaut);}}, Fait.decisionAllerHaut));
 		regles.add(new Regle("R7", new ArrayList<Fait>(){{add(Fait.estSurVent); add(Fait.videEnHaut);}}, Fait.decisionAllerHaut));
 
-		//regles impliquant un déplacement en bas
+		//regles impliquant un dï¿½placement en bas
 		regles.add(new Regle("R8", new ArrayList<Fait>(){{add(Fait.estSurVide); add(Fait.nonDecouvertADroite);}}, Fait.decisionAllerDroite));
 		regles.add(new Regle("R9", new ArrayList<Fait>(){{add(Fait.estSurCaca); add(Fait.videADroite);}}, Fait.decisionAllerDroite));
 		regles.add(new Regle("R10", new ArrayList<Fait>(){{add(Fait.estSurVent); add(Fait.videADroite);}}, Fait.decisionAllerDroite));
 
-		//regles impliquant un déplacement à droite
+		//regles impliquant un dï¿½placement ï¿½ droite
 		regles.add(new Regle("R11", new ArrayList<Fait>(){{add(Fait.estSurVide); add(Fait.nonDecouvertEnBas);}}, Fait.decisionAllerBas));
 		regles.add(new Regle("R12", new ArrayList<Fait>(){{add(Fait.estSurCaca); add(Fait.videEnBas);}}, Fait.decisionAllerBas));
 		regles.add(new Regle("R13", new ArrayList<Fait>(){{add(Fait.estSurVent); add(Fait.videEnBas);}}, Fait.decisionAllerBas));
 
-		//Regles impliquant un déplacement à gauche
+		//Regles impliquant un dï¿½placement ï¿½ gauche
 		regles.add(new Regle("R14", new ArrayList<Fait>(){{add(Fait.estSurVide); add(Fait.nonDecouvertAGauche);}}, Fait.decisionAllerGauche));
 		regles.add(new Regle("R15", new ArrayList<Fait>(){{add(Fait.estSurCaca); add(Fait.videAGauche);}}, Fait.decisionAllerGauche));
 		regles.add(new Regle("R16", new ArrayList<Fait>(){{add(Fait.estSurVent); add(Fait.videAGauche);}}, Fait.decisionAllerGauche));
@@ -221,4 +220,5 @@ public class essayInference {
 
 		return baseDeFaitsInit;
 	}
+	
 }

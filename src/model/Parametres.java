@@ -5,8 +5,6 @@ package model;
 public class Parametres {
 	
 	//Gestion des points (modifiable)
-	public static final int POINT_PORTAIL = 10*getTAILLE_GRILLE();
-	public static final int COUT_MORT = -10*getTAILLE_GRILLE();
 	public static final int COUT_ENERGIE = -1;
 	public static final int COUT_CAILLOU = -10;
 	

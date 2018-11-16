@@ -24,8 +24,10 @@ public class GameRun implements Runnable{
 		System.out.println("Environnement : Hero en "+model.Environnement.agent.getX()+" , "+model.Environnement.agent.getY());
 
 		Draw drawingEnvironnement = new Draw(Parametres.NOM_ENVIRONNEMENT,Environnement.ListEnvironement);
+		DrawControls drawControls = new DrawControls();
 		ViewAgent drawingAgent = new ViewAgent(Parametres.NOM_AGENT, Environnement.ListEnvironement);
 		drawingEnvironnement.render();
+		drawControls.render();
 		drawingAgent.render();
 		System.out.println("Initialisation effectuee ! ");
 		
@@ -48,7 +50,7 @@ public class GameRun implements Runnable{
 				Environnement.agent.observer();
 				Environnement.agent.calculScore();
 				
-				System.out.println(Environnement.agent.getListElementObs());
+			//	System.out.println(Environnement.agent.getListElementObs());
 				
 				BF.clear();
 				BR.clear();
@@ -58,7 +60,10 @@ public class GameRun implements Runnable{
 			//	System.out.println(BF);
 				System.out.println(essayInference.moteurInference(BF, BR, buts));
 				
+				//Environnement.agent.faireLesActionsBF(BF);
+				
 				drawingEnvironnement.render();
+				drawControls.render();
 				drawingAgent.render();
 				
 				Environnement.newCycle = false;
@@ -67,6 +72,7 @@ public class GameRun implements Runnable{
 				System.out.println("Initialisation du niveau "+Parametres.getNiveau()+" ... ");
 				initialisationEnvironnement(Parametres.getNiveau());
 				drawingEnvironnement.render();
+				drawControls.render();
 				drawingAgent.render();
 				System.out.println("Initialisation effectuee ! ");
 				GameRun.demandeNouveauNiveau = false;
@@ -253,11 +259,13 @@ public class GameRun implements Runnable{
 			if(Parametres.getNiveau()>1) {
 				Parametres.setNIVEAU(Parametres.getNiveau()-1);
 			}
+			Environnement.setScoreEnvironnement(Environnement.getScoreEnvironnement()-10*Parametres.getTAILLE_GRILLE());
 			GameRun.demandeNouveauNiveau = true;
 		}
 
 		if(Environnement.portailEn(x,y) && lastAction == Environnement.agent.SORTIR) {
 			Parametres.setNIVEAU(Parametres.getNiveau()+1);
+			Environnement.setScoreEnvironnement(Environnement.getScoreEnvironnement()+10*Parametres.getTAILLE_GRILLE());
 			GameRun.demandeNouveauNiveau = true;
 		}
 
